@@ -15,7 +15,7 @@ TeleQuest aims to provide an intuitive and user-friendly Telegram bot to meet yo
 
 TeleQuest consists of two main parts:
 
-1. **Telegram Bot**: An interactive bot built using Python that offers various functionalities. You can directly start a conversation with our bot on Telegram by [clicking here](#link-to-the-telegram-bot).
+1. **Telegram Bot**: An interactive bot built using Python that offers various functionalities. You can directly start a conversation with our bot on Telegram by [clicking here](t.me/minerva_tele_quest_bot).
 
 2. **Website**: A comprehensive website built with React. The website provides in-depth details about the Telegram bot and serves as an introductory platform for new users. Visit our website [here](#link-to-the-website).
 
