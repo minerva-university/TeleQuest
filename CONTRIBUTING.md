@@ -47,10 +47,9 @@ Before you start contributing, make sure you have the following tools installed:
    git checkout -b username/feature-name
    ```
 
-
 ## Working on the Bot
 
-If you want to get started with working on the telegram bot, follow these steps:
+If you want to get started with working on the Telegram bot, follow these steps:
 
 1. **Change to the Bot Directory**:
    
@@ -73,8 +72,35 @@ If you want to get started with working on the telegram bot, follow these steps:
      sudo apt-get install python3 python3-pip
      ```
 
-3. **Installing Dependencies**:
+3. **Setting up a Virtual Environment**:
+
+   First, install `virtualenv` if it's not already installed:
+
+   ```bash
+   pip install virtualenv
+   ```
+
+   Now, create a virtual environment named `.venv`:
+
+   ```bash
+   python3 -m venv .venv
+   ```
+
+   Activate the virtual environment:
+
+   - **Windows**:
+     ```bash
+     .\.venv\Scripts\activate
+     ```
+   - **Mac/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+4. **Installing Dependencies**:
    
+   With the virtual environment activated, install the necessary dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
