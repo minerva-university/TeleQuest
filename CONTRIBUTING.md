@@ -104,6 +104,7 @@ If you want to get started with working on the Telegram bot, follow these steps:
    ```bash
    pip install -r requirements.txt
    ```
+Recommended: We will be using a Python-Telegram-API wrapper or package called [python-telegram-bot](https://python-telegram-bot.org/). You can [read the documentation](https://docs.python-telegram-bot.org/en/v20.6/) to get a better understanding of how to use it.
 
 ## Working on the Web App
 
