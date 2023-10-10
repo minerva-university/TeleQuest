@@ -4,14 +4,14 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
 
 ## Table of Contents
 - [CONTRIBUTING.md](#contributingmd)
-	- [Table of Contents](#table-of-contents)
-	- [Setting Up Your Development Environment](#setting-up-your-development-environment)
-		- [Requirements](#requirements)
-		- [Getting Started](#getting-started)
-	- [Working on the Bot](#working-on-the-bot)
-	- [Working on the Web App](#working-on-the-web-app)
-	- [Committing Changes](#committing-changes)
-	- [Submitting a Pull Request](#submitting-a-pull-request)
+  - [Table of Contents](#table-of-contents)
+  - [Setting Up Your Development Environment](#setting-up-your-development-environment)
+    - [Requirements](#requirements)
+    - [Getting Started](#getting-started)
+  - [Working on the Bot](#working-on-the-bot)
+  - [Working on the Web App](#working-on-the-web-app)
+  - [Committing Changes](#committing-changes)
+  - [Submitting a Pull Request](#submitting-a-pull-request)
 
 ## Setting Up Your Development Environment
 
