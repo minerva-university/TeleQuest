@@ -4,14 +4,14 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
 
 ## Table of Contents
 - [CONTRIBUTING.md](#contributingmd)
-  - [Table of Contents](#table-of-contents)
-  - [Setting Up Your Development Environment](#setting-up-your-development-environment)
-    - [Requirements](#requirements)
-    - [Getting Started](#getting-started)
-  - [Working on the Bot](#working-on-the-bot)
-  - [Working on the Web App](#working-on-the-web-app)
-  - [Committing Changes](#committing-changes)
-  - [Submitting a Pull Request](#submitting-a-pull-request)
+	- [Table of Contents](#table-of-contents)
+	- [Setting Up Your Development Environment](#setting-up-your-development-environment)
+		- [Requirements](#requirements)
+		- [Getting Started](#getting-started)
+	- [Working on the Bot](#working-on-the-bot)
+	- [Working on the Web App](#working-on-the-web-app)
+	- [Committing Changes](#committing-changes)
+	- [Submitting a Pull Request](#submitting-a-pull-request)
 
 ## Setting Up Your Development Environment
 
@@ -159,8 +159,10 @@ Recommended: We will be using a Python-Telegram-API wrapper or package called [p
 1. Navigate to the main repository you forked.
 2. Click on "Pull requests" and then the "New Pull Request" button.
 3. Select your branch from the dropdown and submit your pull request.
-4. **IMPORTANT**: Please ensure that your Pull request gets at least one additional review before merging. This is to ensure that we have a second set of eyes on the code before merging it into the main branch.
-5. Merging should be done to the `dev` branch only. We only merge to the `main` branch when we are ready to deploy a new version of the project.
+4. On the right side of the screen, request a review from someone on the team.
+5. Send a link to the Telequest Pull Requests group chat and tag the person(s) you assigned as a reviewer.
+6. **IMPORTANT**: Please ensure that your Pull request gets at least one additional review before merging. This is to ensure that we have a second set of eyes on the code before merging it into the main branch.
+7. Merging should be done to the `dev` branch only. We only merge to the `main` branch when we are ready to deploy a new version of the project.
 
 ---
 

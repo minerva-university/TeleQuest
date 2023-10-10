@@ -1,4 +1,4 @@
-from ttypes import TMessage
+from telegram_types import TMessage
 import json
 
 EMBEDDING_MODEL = (

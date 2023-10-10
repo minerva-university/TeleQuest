@@ -105,12 +105,12 @@ answered previously.",
         },
         {"role": "user", "content": message},
     ]
-    response: ChatCompletion = openai.ChatCompletion.create(
+    response = openai.ChatCompletion.create(
         model=model, messages=messages, temperature=0
-    )  # type: ignore
+    )
+    response = cast(ChatCompletion, response) # for type checking
     response_message = response["choices"][0]["message"]["content"]
     return response_message
-
 
 if __name__ == "__main__":
     ask("What was the punishment for arriving late to Argentina?")
