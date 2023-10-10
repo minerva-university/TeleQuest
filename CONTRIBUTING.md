@@ -60,7 +60,7 @@ If you want to get started with working on the Telegram bot, follow these steps:
 2. **Installing Python**:
 
    - **Windows**:
-     1. Download the latest version of Python from [Python's official site](https://www.python.org/downloads/windows/).
+     1. Download Python version 3.11 from [Python's official site](https://www.python.org/downloads/windows/).
      2. Run the installer. Ensure that you check the option to add Python to PATH.
    - **Mac**:
      ```bash
