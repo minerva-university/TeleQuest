@@ -11,6 +11,7 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
   - [Working on the Bot](#working-on-the-bot)
   - [Working on the Web App](#working-on-the-web-app)
   - [Committing Changes](#committing-changes)
+  - [Working on the AI part](#working-on-the-ai-part)
   - [Submitting a Pull Request](#submitting-a-pull-request)
 
 ## Setting Up Your Development Environment
@@ -153,6 +154,24 @@ Recommended: We will be using a Python-Telegram-API wrapper or package called [p
    ```bash
    git push origin username/feature-name
    ```
+
+## Working on the AI part
+
+The AI part of the application is also going to be written in python which means it also has its own `requirements.txt`. You can choose to install the dependencies in the same virtual environment as the bot or create a new one. The choice is yours. However, we recommend that you create a new virtual environment for the AI part.
+
+1. **Change to the AI Directory**:
+
+   ```bash
+   cd ai
+   ```
+Follow steps `3` and `4` from the [Working on the Bot](#working-on-the-bot) section to create a virtual environment and install the dependencies for the AI part.
+
+If you choose to use the same virtual environment as the bot, you can just run
+
+ ```bash
+pip install -r requirements.txt
+```
+ to install the dependencies. However, make sure to not update the `requirements.txt` file in the bot directory with the dependencies for the AI part and vice versa.
 
 ## Submitting a Pull Request
 
