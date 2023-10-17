@@ -12,7 +12,10 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
   - [Working on the Web App](#working-on-the-web-app)
   - [Committing Changes](#committing-changes)
   - [Working on the AI part](#working-on-the-ai-part)
+  - [Code Style](#code-style)
   - [Submitting a Pull Request](#submitting-a-pull-request)
+  - [Approving a Pull Request](#approving-a-pull-request)
+  - [Merging a Pull Request](#merging-a-pull-request)
 
 ## Setting Up Your Development Environment
 
@@ -61,16 +64,16 @@ If you want to get started with working on the Telegram bot, follow these steps:
 2. **Installing Python**:
 
    - **Windows**:
-     1. Download the latest version of Python from [Python's official site](https://www.python.org/downloads/windows/).
+     1. Download Python version 3.11 from [Python's official site](https://www.python.org/downloads/release/python-3116/).
      2. Run the installer. Ensure that you check the option to add Python to PATH.
    - **Mac**:
      ```bash
-     brew install python
+     brew install python@3.11
      ```
    - **Linux (Ubuntu)**:
      ```bash
      sudo apt-get update
-     sudo apt-get install python3 python3-pip
+     sudo apt-get install python3.11 python3-pip
      ```
 
 3. **Setting up a Virtual Environment**:
@@ -173,15 +176,37 @@ pip install -r requirements.txt
 ```
  to install the dependencies. However, make sure to not update the `requirements.txt` file in the bot directory with the dependencies for the AI part and vice versa.
 
+## Code Style
+
+For Javascript and React, please use the [Prettier Extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for VSCode. Ensure it autoformats when you save a file.
+
+For Python, use the [Black Formatter Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) for VSCode. Ensure it autoformats when you save a file.
+
+Use [type hints](https://www.pythontutorial.net/python-basics/python-type-hints/) with Python as much as possible without sacrificing code readability. Most of the code will be in Python and type hints often make debugging easier.
+
+You can use the [Pylance Language Server](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) for VSCode to catch type errors easily and utilise type hints better. It also has other features you can read about there.
+
 ## Submitting a Pull Request
 
 1. Navigate to the main repository you forked.
 2. Click on "Pull requests" and then the "New Pull Request" button.
 3. Select your branch from the dropdown and submit your pull request.
 4. On the right side of the screen, request a review from someone on the team.
-5. Send a link to the Telequest Pull Requests group chat and tag the person(s) you assigned as a reviewer.
-6. **IMPORTANT**: Please ensure that your Pull request gets at least one additional review before merging. This is to ensure that we have a second set of eyes on the code before merging it into the main branch.
-7. Merging should be done to the `dev` branch only. We only merge to the `main` branch when we are ready to deploy a new version of the project.
+5. **IMPORTANT**: Please ensure that your Pull request gets at least one additional review before merging. This is to ensure that we have a second set of eyes on the code before merging it into the main branch.
+
+## Approving a Pull Request
+
+1. Go to the Pull request link.
+2. If you were previously added a reviewer, you can click on "Add your review" at the top.
+3. If you do not see this, go to the last commit.
+4. On the right side of the screen, click on "Review changes".
+5. Add a comment and select either "Comment", "Request changes" or "Approve".
+6. **Do not** merge the pull request after approving.
+
+## Merging a Pull Request
+
+1. Merging should be done to the `dev` branch only. We only merge to the `main` branch when we are ready to deploy a new version of the project.
+2. Only merge pull requests authored by you. Your approver should not merge your pull request.
 
 ---
 
