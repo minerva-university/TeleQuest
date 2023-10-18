@@ -2,9 +2,11 @@
 
 ## Running Locally
 
-If you want to see the magic of the telegram bot happen on your computer, just go to the `main.py` and set deploy to `False` and run the file `deploy=False`.
+To run locally, use:
+```python3 main.py```
 
-Then run the file `main.py` and you should see the bot running on your terminal.
+*To run in production*
+`python3 main.py --deploy` or `python3 main.py -d`
 
 Make sure you have the environment variables and all dependencies are installed.
 
