@@ -7,6 +7,7 @@ from database import store_message_to_db
 # import messages.json
 messages = json.load(open("messages.json", encoding="utf-8"))
 
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     This function is the response of the bot when a user starts the bot.
@@ -24,10 +25,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     # TODO: write a proper message for the user start command
     await context.bot.send_message(
-            chat_id=chat_id,
-            text=messages["start_user"].format(first_name)
-
-        )
+        chat_id=chat_id, text=messages["start_user"].format(first_name)
+    )
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -41,7 +40,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         context: telegram.ext.Context
             The context object that is received from the telegram bot.
     """
-    
+
     # get the id of the group chat
     chat_id = update.effective_chat.id
 
@@ -53,13 +52,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         # TODO: Logic to handle different types of messages
 
         await context.bot.send_message(
-            chat_id=chat_id,
-            text=messages["response"].format("Last message", msg.text)
+            chat_id=chat_id, text=messages["response"].format("Last message", msg.text)
         )
 
         # TODO: Logic for when to store to the database.
         store_message = store_message_to_db(chat_id, msg)
-    # if message contains a bot command '/start'  
+    # if message contains a bot command '/start'
     else:
         # TODO: Handle specific bot commands.
         pass
