@@ -1,8 +1,11 @@
-from start import *
+import json
 from telegram import Update
 from telegram.ext import ContextTypes
 from database import store_message_to_db
 
+
+# import messages.json
+messages = json.load(open("messages.json", encoding="utf-8"))
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
