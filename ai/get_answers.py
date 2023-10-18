@@ -12,9 +12,7 @@ from scipy import (
 from read_chat_export import read_messages
 from read_embed_results import read_embeddings
 
-EMBEDDING_MODEL = (
-    "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
-)
+EMBEDDING_MODEL = "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
 GPT_MODEL = "gpt-3.5-turbo"
 openai.api_key_path = "./key"
 
@@ -60,9 +58,7 @@ def num_tokens(text: str, model: str = GPT_MODEL) -> int:
     return len(encoding.encode(text))
 
 
-def query_message(
-    query: str, df: pd.DataFrame, model: str, token_budget: int
-) -> str:
+def query_message(query: str, df: pd.DataFrame, model: str, token_budget: int) -> str:
     """Return a message for GPT, with relevant source texts pulled
     from a dataframe."""
     strings, relatednesses = strings_ranked_by_relatedness(query, df)
@@ -74,10 +70,7 @@ find an answer."'
     message = introduction
     for string in strings:
         next_doc = f'\n\nTelegram Message:\n"""\n{string}\n"""'
-        if (
-            num_tokens(message + next_doc + question, model=model)
-            > token_budget
-        ):
+        if num_tokens(message + next_doc + question, model=model) > token_budget:
             break
         else:
             message += next_doc
@@ -108,9 +101,10 @@ answered previously.",
     response = openai.ChatCompletion.create(
         model=model, messages=messages, temperature=0
     )
-    response = cast(ChatCompletion, response) # for type checking
+    response = cast(ChatCompletion, response)  # for type checking
     response_message = response["choices"][0]["message"]["content"]
     return response_message
+
 
 if __name__ == "__main__":
     ask("What was the punishment for arriving late to Argentina?")
