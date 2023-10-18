@@ -36,12 +36,11 @@ def store_message_to_db(chat_id: int, msg: Message) -> bool:
 
     # serialize the telegram message to the format we want
     message = {
-        "from_user": json.loads(msg.from_user.to_json()),  # user object
+        "from_user": msg.from_user
+        and json.loads(msg.from_user.to_json()),  # user object
         "date": msg.date,
         # reply_to_message exists if the current message is a reply to a previous one, in which case it references its id.
-        "reply_to_message": msg.reply_to_message.message_id
-        if msg.reply_to_message
-        else None,
+        "reply_to_message": msg.reply_to_message and msg.reply_to_message.message_id,
         "text": msg.text,
         "photo": msg.photo,
         "video": msg.video,
