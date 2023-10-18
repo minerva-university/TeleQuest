@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 import telegram
 from responses import start, handle_message
@@ -47,4 +48,5 @@ def main(deploy=False):
 
 
 if __name__ == "__main__":
-    main(deploy=False)
+    deploy = "--deploy" in sys.argv or "-d" in sys.argv
+    main(deploy=deploy)
