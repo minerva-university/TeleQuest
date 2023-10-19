@@ -1,16 +1,16 @@
-from typing import Callable, Iterable, cast
-from aitypes import (
+from typing import cast
+from .aitypes import (
     ChatCompletion,
     EmbedResponseData,
 )  # for converting embeddings saved as strings back to arrays
 import openai  # for calling the OpenAI API
 import pandas as pd  # for storing text and embeddings data
 import tiktoken  # for counting tokens
-from scipy import (
+from scipy import (  # type: ignore
     spatial,
 )  # for calculating vector similarities for search
-from read_chat_export import read_messages
-from read_embed_results import read_embeddings
+from .read_chat_export import read_messages
+from .read_embed_results import read_embeddings
 
 EMBEDDING_MODEL = "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
 GPT_MODEL = "gpt-3.5-turbo"

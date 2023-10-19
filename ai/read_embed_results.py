@@ -1,5 +1,5 @@
 import json
-from aitypes import OpenAIJSONL
+from .aitypes import OpenAIJSONL
 
 EMBEDDING_MODEL = "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
 BATCH_SIZE = 2000  # you can submit up to 2048 embedding inputs per request

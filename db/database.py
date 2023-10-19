@@ -4,7 +4,7 @@ import certifi
 import pymongo
 from telegram import Message
 from dotenv import load_dotenv
-from db_types import GroupChat
+from .db_types import GroupChat
 
 load_dotenv()
 
