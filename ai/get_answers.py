@@ -1,4 +1,4 @@
-from typing import cast
+from typing import Callable, Iterable, cast
 from aitypes import (
     ChatCompletion,
     EmbedResponseData,
@@ -27,7 +27,7 @@ df = pd.DataFrame({"text": messages, "embedding": embeddings})
 
 
 # search function
-def strings_ranked_by_relatedness(
+def strings_ranked_by_relatedness(  # type: ignore
     query: str,
     df: pd.DataFrame,
     relatedness_fn=lambda x, y: 1 - spatial.distance.cosine(x, y),
@@ -44,11 +44,10 @@ def strings_ranked_by_relatedness(
     strings_and_relatednesses: list[tuple[str, float]] = [
         (row["text"], relatedness_fn(query_embedding, row["embedding"]))
         for i, row in df.iterrows()
-    ]  # type: ignore
+    ]
     strings_and_relatednesses.sort(key=lambda x: x[1], reverse=True)
-    strings, relatednesses = zip(*strings_and_relatednesses)
-    strings = cast(list[str], strings)  # for type checking
-    relatednesses = cast(list[float], relatednesses)
+    strings_relatednesses = zip(*strings_and_relatednesses)
+    strings, relatednesses = cast(tuple[list[str], list[float]], strings_relatednesses)
     return strings[:top_n], relatednesses[:top_n]
 
 
@@ -98,10 +97,10 @@ answered previously.",
         },
         {"role": "user", "content": message},
     ]
-    response = openai.ChatCompletion.create(
+    resp = openai.ChatCompletion.create(  # type: ignore
         model=model, messages=messages, temperature=0
     )
-    response = cast(ChatCompletion, response)  # for type checking
+    response = cast(ChatCompletion, resp)  # for type checking
     response_message = response["choices"][0]["message"]["content"]
     return response_message
 

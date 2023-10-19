@@ -4,15 +4,18 @@ import certifi
 import pymongo
 from telegram import Message
 from dotenv import load_dotenv
+from db_types import GroupChat
 
 load_dotenv()
 
 # Connect to the MongoDB Database
-client = pymongo.MongoClient(os.getenv("MONGO_URI"), tlsCAFile=certifi.where())
-db = client[os.getenv("DB_NAME")]
+client: pymongo.MongoClient[GroupChat] = pymongo.MongoClient(
+    os.getenv("MONGO_URI"), tlsCAFile=certifi.where()
+)
+db = client[os.getenv("DB_NAME", "")]
 
 
-def store_message_to_db(chat_id: int, msg: Message) -> bool:
+def store_message_to_db(chat_id: int | None, msg: Message) -> bool:
     """
     This function stores a given message to the database
 

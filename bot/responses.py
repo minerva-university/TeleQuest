@@ -1,7 +1,7 @@
 import json
 from telegram import Update
 from telegram.ext import ContextTypes
-from database import store_message_to_db
+from ..db.database import store_message_to_db
 
 
 # import messages.json
@@ -20,13 +20,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
 
     # get the user's chat id and first name
-    chat_id = update.effective_chat.id
-    first_name = update.effective_chat.first_name
+    effective_chat = update.effective_chat
+    chat_id = effective_chat and effective_chat.id
+    first_name = effective_chat and effective_chat.first_name
 
-    # TODO: write a proper message for the user start command
-    await context.bot.send_message(
-        chat_id=chat_id, text=messages["start_user"].format(first_name)
-    )
+    if chat_id:
+        # TODO: write a proper message for the user start command
+        await context.bot.send_message(
+            chat_id=chat_id, text=messages["start_user"].format(first_name)
+        )
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -40,18 +42,19 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         context: telegram.ext.Context
             The context object that is received from the telegram bot.
     """
+    effective_chat = update.effective_chat
 
     # get the id of the group chat
-    chat_id = update.effective_chat.id
+    chat_id = effective_chat and effective_chat.id
 
     # get the message object
     msg = update.message
 
     # if the message is a regular type of message not a bot command
-    if not msg.entities:
+    if msg and not msg.entities:
         # TODO: Logic to handle different types of messages
 
-        await context.bot.send_message(
+        chat_id and await context.bot.send_message(
             chat_id=chat_id, text=messages["response"].format("Last message", msg.text)
         )
 

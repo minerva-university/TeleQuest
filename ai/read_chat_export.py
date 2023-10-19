@@ -1,4 +1,4 @@
-from telegram_types import TMessage
+from ..bot.telegram_types import TMessage
 import json
 
 EMBEDDING_MODEL = "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
