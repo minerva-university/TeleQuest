@@ -3,8 +3,12 @@ import json
 import certifi
 import pymongo
 from telegram import Message
-from dotenv import load_dotenv
-from .db_types import GroupChat
+from dotenv import load_dotenv, find_dotenv
+import sys
+
+sys.path.append("..")
+from db.db_types import GroupChat
+
 
 load_dotenv()
 
