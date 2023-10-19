@@ -2,7 +2,7 @@ import os
 import sys
 import logging
 import telegram
-from responses import start, handle_message
+from .responses import start, handle_message
 from telegram.ext import ApplicationBuilder
 from telegram.ext import filters
 from telegram.ext import CommandHandler, MessageHandler
@@ -27,7 +27,7 @@ msg_handler = MessageHandler(filters.ChatType.GROUPS & filters.ALL, handle_messa
 
 
 # main app
-def main(deploy=False):
+def main(deploy: bool = False) -> None:
     app.add_handler(
         CommandHandler("start", start, filters=~filters.ChatType.GROUPS)
     )  # add specific handler for '/start

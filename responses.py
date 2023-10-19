@@ -45,7 +45,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     effective_chat = update.effective_chat
 
     # get the id of the group chat
-    chat_id = effective_chat and effective_chat.id
+    chat_id = effective_chat.id if effective_chat else None
 
     # get the message object
     msg = update.message
