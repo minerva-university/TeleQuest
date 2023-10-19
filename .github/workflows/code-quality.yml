@@ -11,6 +11,7 @@ jobs:
       with:
         python-version: 3.x
     - run: pip install --upgrade pip
-    - run: pip install "black<23"  mypy==v1.6.1
+    - run: pip install -r py-requirements.txt
+    - run: pip install "black<23"
     - run: black --diff --check $(git ls-files '*.py')
-    - run: mypy --install-types --non-interactive --strict $(git ls-files '*.py')  --disable-error-code name-match --disable-error-code no-redef --disable-error-code unused-ignore
+    - run: mypy --install-types  --non-interactive --strict $(git ls-files '*.py')  --disable-error-code name-match --disable-error-code no-redef --disable-error-code unused-ignore
