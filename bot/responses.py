@@ -54,7 +54,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     if msg and not msg.entities:
         # TODO: Logic to handle different types of messages
 
-        chat_id and await context.bot.send_message(
+        _ = chat_id and await context.bot.send_message(
             chat_id=chat_id, text=messages["response"].format("Last message", msg.text)
         )
 
