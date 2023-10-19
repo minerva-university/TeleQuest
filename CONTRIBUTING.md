@@ -13,6 +13,7 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
   - [Committing Changes](#committing-changes)
   - [Working on the AI part](#working-on-the-ai-part)
   - [Code Style](#code-style)
+  - [Code: Python](#code-python)
   - [Submitting a Pull Request](#submitting-a-pull-request)
   - [Approving a Pull Request](#approving-a-pull-request)
   - [Merging a Pull Request](#merging-a-pull-request)
@@ -180,11 +181,26 @@ pip install -r requirements.txt
 
 For Javascript and React, please use the [Prettier Extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for VSCode. Ensure it autoformats when you save a file.
 
-For Python, use the [Black Formatter Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) for VSCode. Ensure it autoformats when you save a file.
+For Python, use the [Black Formatter Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) for VSCode. Ensure it autoformats when you save a file. Files that are not properly formatted will not pass the pull request tests.
 
 Use [type hints](https://www.pythontutorial.net/python-basics/python-type-hints/) with Python as much as possible without sacrificing code readability. Most of the code will be in Python and type hints often make debugging easier.
 
+We will be using `mypy` for static type checking. The `py-requirements.txt` contains all requirements for all the Python files and is needed by `mypy`. You may have multiple virtual environments for different subfolders, but do keep one at the root folder with all requirements for Python installed. (Or bet that your PR won't pass all checks the first time).
+
 You can use the [Pylance Language Server](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) for VSCode to catch type errors easily and utilise type hints better. It also has other features you can read about there.
+
+## Code: Python
+
+As mentioned before, we're using type hints with Python. This helps us catch many potential errors early, but we need to be disciplined.
+
+1. Installing a third-party library should be done only when you really need to, and it's not the the Python standard library.
+2. If you are installing a new library (adding to our requirements), from your root virtual environment (with requirements from `py-requirements.txt`), run 
+  ```bash
+  pip3 freeze > py-requirements.txt
+  ``` 
+to update our "global" requirements.
+
+3. Try to define all types you think need to be defined. It may help to have a separate file containing only types. Look at [telegram_types.py](./bot/telegram_types.py) as an example.
 
 ## Submitting a Pull Request
 
@@ -201,7 +217,8 @@ You can use the [Pylance Language Server](https://marketplace.visualstudio.com/i
 3. If you do not see this, go to the last commit.
 4. On the right side of the screen, click on "Review changes".
 5. Add a comment and select either "Comment", "Request changes" or "Approve".
-6. **Do not** merge the pull request after approving.
+6. _Do not_ approve a PR for which all checks have not passed, if any.
+7. **Do not** merge the pull request after approving.
 
 ## Merging a Pull Request
 
