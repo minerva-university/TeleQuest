@@ -14,4 +14,4 @@ jobs:
     - run: pip install -r py-requirements.txt
     - run: pip install "black<23"
     - run: black --diff --check $(git ls-files '*.py')
-    - run: mypy --install-types  --non-interactive --strict $(git ls-files '*.py')  --disable-error-code name-match --disable-error-code no-redef --disable-error-code unused-ignore
+    - run: mypy --explicit-package-bases --install-types  --non-interactive  --cache-dir=.mypy_cache/ --strict $(git ls-files '*.py')  --disable-error-code name-match --disable-error-code no-redef --disable-error-code unused-ignore
