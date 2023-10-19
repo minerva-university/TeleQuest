@@ -13,4 +13,4 @@ jobs:
     - run: pip install --upgrade pip
     - run: pip install "black<23"  mypy==v1.6.1
     - run: black --diff --check $(git ls-files '*.py')
-    - run: mypy --install-types --strict $(git ls-files '*.py')  --disable-error-code name-match
+    - run: mypy --install-types --non-interactive --strict $(git ls-files '*.py')  --disable-error-code name-match
