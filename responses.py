@@ -1,7 +1,10 @@
 import json
 from telegram import Update
 from telegram.ext import ContextTypes
-from ..db.database import store_message_to_db
+import sys
+
+sys.path.append("..")
+from db.database import store_message_to_db
 
 
 # import messages.json
