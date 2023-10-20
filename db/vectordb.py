@@ -1,21 +1,23 @@
 import pinecone
-from typing import Any, Sequence, cast
+from typing import Sequence, cast
 from dotenv import load_dotenv
 import os
 import sys
+from pathlib import Path
 
-sys.path.append("..")
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from db.db_types import PCEmbeddingData, PCQueryResults
 
 
 load_dotenv()
 
-pinecone.init(api_key=os.environ["PINECONE_API_KEY"])
+pinecone.init(
+    api_key=os.environ["PINECONE_KEY"], environment=os.environ["PINECONE_ENV"]
+)
 
-embedding_index = cast(pinecone.Index, pinecone.list_indexes()[0])
+embedding_index: pinecone.Index = pinecone.Index(pinecone.list_indexes()[0])
 
 
-# Uploading Vectors
 def upload_vectors(
     index: pinecone.Index, message_embeddings: Sequence[PCEmbeddingData]
 ) -> None:
@@ -33,7 +35,6 @@ def upload_vectors(
     return index.upsert(vectors=message_embeddings)  # type: ignore
 
 
-# Querying the Index
 def query(
     index: pinecone.Index,
     query_vector: list[float],
@@ -46,11 +47,10 @@ def query(
     return results
 
 
-# Delete the Index (if needed)
 def delete(index_name: str) -> None:
     """Deletes the Pinecone index."""
     pinecone.delete_index(name=index_name)
 
 
 if __name__ == "__main__":
-    upload_vectors(embedding_index, [{"id": "1", "values": [1, 2, 3]}])
+    pass

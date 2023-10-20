@@ -1,5 +1,9 @@
 from typing import Any, TypedDict, NotRequired, cast
 from pymongo.collection import Collection
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from bot.telegram_types import TMessage
 
 GroupChat = TypedDict(
