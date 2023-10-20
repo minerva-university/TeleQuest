@@ -8,10 +8,10 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
   - [Setting Up Your Development Environment](#setting-up-your-development-environment)
     - [Requirements](#requirements)
     - [Getting Started](#getting-started)
-  - [Working on the Bot](#working-on-the-bot)
+  - [Setting up your dev environment for Python](#setting-up-your-dev-environment-for-python)
+  - [Working on the main application](#working-on-the-main-application)
   - [Working on the Web App](#working-on-the-web-app)
   - [Committing Changes](#committing-changes)
-  - [Working on the AI part](#working-on-the-ai-part)
   - [Code Style](#code-style)
   - [Code: Python](#code-python)
   - [Submitting a Pull Request](#submitting-a-pull-request)
@@ -25,8 +25,10 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
 Before you start contributing, make sure you have the following tools installed:
 
 1. **VS Code**: We recommend using [Visual Studio Code (VS Code)](https://code.visualstudio.com/) as your code editor. It offers a rich set of extensions and integrated terminal which will make development smoother.
+2. [Black Formatter Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) for VSCode.
+3. [Prettier Extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for VSCode.
 
-2. **Git**: This is essential for source code management. If you don't have Git installed, you can download and install it from [Git's official site](https://git-scm.com/).
+4. **Git**: This is essential for source code management. If you don't have Git installed, you can download and install it from [Git's official site](https://git-scm.com/).
 
 ### Getting Started
 
@@ -51,16 +53,7 @@ Before you start contributing, make sure you have the following tools installed:
    ```bash
    git checkout -b username/feature-name
    ```
-
-## Working on the Bot
-
-If you want to get started with working on the Telegram bot, follow these steps:
-
-1. **Change to the Bot Directory**:
-   
-   ```bash
-   cd bot
-   ```
+## Setting up your dev environment for Python
 
 2. **Installing Python**:
 
@@ -91,7 +84,9 @@ If you want to get started with working on the Telegram bot, follow these steps:
    python3 -m venv .venv
    ```
 
-   Activate the virtual environment:
+4. **Activate the virtual environment**:
+
+   You will be doing this most of the time before working on the Python code.
 
    - **Windows**:
      ```bash
@@ -102,7 +97,7 @@ If you want to get started with working on the Telegram bot, follow these steps:
      source .venv/bin/activate
      ```
 
-4. **Installing Dependencies**:
+5. **Installing Dependencies**:
    
    With the virtual environment activated, install the necessary dependencies:
 
@@ -110,6 +105,19 @@ If you want to get started with working on the Telegram bot, follow these steps:
    pip install -r requirements.txt
    ```
 Recommended: We will be using a Python-Telegram-API wrapper or package called [python-telegram-bot](https://python-telegram-bot.org/). You can [read the documentation](https://docs.python-telegram-bot.org/en/v20.6/) to get a better understanding of how to use it.
+
+
+## Working on the main application
+
+If you want to get started with working on the Telegram bot, the AI or the database, follow these steps:
+
+1. **Change to the directory**: For example for the bot
+   
+   ```bash
+   cd bot
+   ```
+
+
 
 ## Working on the Web App
 
@@ -153,29 +161,12 @@ Recommended: We will be using a Python-Telegram-API wrapper or package called [p
    git commit -m "YOUR COMMIT MESSAGE HERE"
    ```
 
-3. Push the changes to your fork:
+3. Push the changes to your branch:
 
    ```bash
    git push origin username/feature-name
    ```
 
-## Working on the AI part
-
-The AI part of the application is also going to be written in python which means it also has its own `requirements.txt`. You can choose to install the dependencies in the same virtual environment as the bot or create a new one. The choice is yours. However, we recommend that you create a new virtual environment for the AI part.
-
-1. **Change to the AI Directory**:
-
-   ```bash
-   cd ai
-   ```
-Follow steps `3` and `4` from the [Working on the Bot](#working-on-the-bot) section to create a virtual environment and install the dependencies for the AI part.
-
-If you choose to use the same virtual environment as the bot, you can just run
-
- ```bash
-pip install -r requirements.txt
-```
- to install the dependencies. However, make sure to not update the `requirements.txt` file in the bot directory with the dependencies for the AI part and vice versa.
 
 ## Code Style
 
@@ -194,13 +185,13 @@ You can use the [Pylance Language Server](https://marketplace.visualstudio.com/i
 As mentioned before, we're using type hints with Python. This helps us catch many potential errors early, but we need to be disciplined.
 
 1. Installing a third-party library should be done only when you really need to, and it's not in the Python standard library.
-2. If you are installing a new library (adding to our requirements), from your root virtual environment (with requirements from `py-requirements.txt`), run 
+2. If you are installing a new library (adding to our requirements), from the root directory (where `requirements.txt` is located), run 
   ```bash
-  pip3 freeze > py-requirements.txt
+  pip3 freeze > requirements.txt
   ``` 
-to update our "global" requirements.
+to update our requirements.
 
-3. Try to define all types you think need to be defined. It may help to have a separate file containing only types. Look at [telegram_types.py](./bot/telegram_types.py) as an example.
+1. Try to define all types you think need to be defined. It may help to have a separate file containing only types. Look at [telegram_types.py](./bot/telegram_types.py) as an example.
 
 ## Submitting a Pull Request
 
