@@ -8,6 +8,7 @@ RequestData = TypedDict(
     },
 )
 
+
 EmbeddingData = TypedDict(
     "EmbeddingData", {"object": str, "index": int, "embedding": list[float]}
 )
@@ -22,9 +23,7 @@ EmbedResponseData = TypedDict(
     },
 )
 
-OpenAIJSONL = tuple[
-    RequestData, EmbedResponseData, dict[Literal["metadata"], Any]
-]
+OpenAIJSONL = tuple[RequestData, EmbedResponseData, dict[Literal["metadata"], Any]]
 
 CompletionMessage = TypedDict(
     "Message",

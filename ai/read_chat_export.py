@@ -1,9 +1,11 @@
-from telegram_types import TMessage
+import sys
+
+sys.path.append("..")
+
+from bot.telegram_types import TMessage
 import json
 
-EMBEDDING_MODEL = (
-    "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
-)
+EMBEDDING_MODEL = "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
 BATCH_SIZE = 2000  # you can submit up to 2048 embedding inputs per request
 
 
@@ -29,23 +31,23 @@ def read_messages(
 
 if __name__ == "__main__":
     messages: list[str]
-    _, messages = read_messages()
+    # _, messages = read_messages()
 
-    messages = messages[-7000:]  # last 7k messages
+    # messages = messages[-7000:]  # last 7k messages
 
     # write embedding requests to file
-    for batch_start in range(0, len(messages), BATCH_SIZE):
-        batch_end = batch_start + BATCH_SIZE
-        batch = messages[batch_start:batch_end]
-        with open(f"embed_m25_chat_reqs_b{BATCH_SIZE}_last7k.jsonl", "a") as f:
-            f.write(
-                json.dumps(
-                    {
-                        "model": EMBEDDING_MODEL,
-                        "input": batch,
-                        "metadata": f"Batch {batch_start} to {batch_end-1}",
-                    }
-                )
-                + "\n"
-            )
-        print(f"Batch {batch_start} to {batch_end-1}")
+    # for batch_start in range(0, len(messages), BATCH_SIZE):
+    #     batch_end = batch_start + BATCH_SIZE
+    #     batch = messages[batch_start:batch_end]
+    #     with open(f"embed_m25_chat_reqs_b{BATCH_SIZE}_last7k.jsonl", "a") as f:
+    #         f.write(
+    #             json.dumps(
+    #                 {
+    #                     "model": EMBEDDING_MODEL,
+    #                     "input": batch,
+    #                     "metadata": f"Batch {batch_start} to {batch_end-1}",
+    #                 }
+    #             )
+    #             + "\n"
+    #         )
+    #     print(f"Batch {batch_start} to {batch_end-1}")

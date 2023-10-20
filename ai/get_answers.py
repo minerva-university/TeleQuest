@@ -1,20 +1,22 @@
+import sys
+
+sys.path.append("..")
+
 from typing import cast
-from aitypes import (
+from ai.aitypes import (
     ChatCompletion,
     EmbedResponseData,
 )  # for converting embeddings saved as strings back to arrays
 import openai  # for calling the OpenAI API
 import pandas as pd  # for storing text and embeddings data
 import tiktoken  # for counting tokens
-from scipy import (
+from scipy import (  # type: ignore
     spatial,
 )  # for calculating vector similarities for search
-from read_chat_export import read_messages
-from read_embed_results import read_embeddings
+from ai.read_chat_export import read_messages
+from ai.read_embed_results import read_embeddings
 
-EMBEDDING_MODEL = (
-    "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
-)
+EMBEDDING_MODEL = "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
 GPT_MODEL = "gpt-3.5-turbo"
 openai.api_key_path = "./key"
 
@@ -29,7 +31,7 @@ df = pd.DataFrame({"text": messages, "embedding": embeddings})
 
 
 # search function
-def strings_ranked_by_relatedness(
+def strings_ranked_by_relatedness(  # type: ignore
     query: str,
     df: pd.DataFrame,
     relatedness_fn=lambda x, y: 1 - spatial.distance.cosine(x, y),
@@ -46,11 +48,10 @@ def strings_ranked_by_relatedness(
     strings_and_relatednesses: list[tuple[str, float]] = [
         (row["text"], relatedness_fn(query_embedding, row["embedding"]))
         for i, row in df.iterrows()
-    ]  # type: ignore
+    ]
     strings_and_relatednesses.sort(key=lambda x: x[1], reverse=True)
-    strings, relatednesses = zip(*strings_and_relatednesses)
-    strings = cast(list[str], strings)  # for type checking
-    relatednesses = cast(list[float], relatednesses)
+    strings_relatednesses = zip(*strings_and_relatednesses)
+    strings, relatednesses = cast(tuple[list[str], list[float]], strings_relatednesses)
     return strings[:top_n], relatednesses[:top_n]
 
 
@@ -60,9 +61,7 @@ def num_tokens(text: str, model: str = GPT_MODEL) -> int:
     return len(encoding.encode(text))
 
 
-def query_message(
-    query: str, df: pd.DataFrame, model: str, token_budget: int
-) -> str:
+def query_message(query: str, df: pd.DataFrame, model: str, token_budget: int) -> str:
     """Return a message for GPT, with relevant source texts pulled
     from a dataframe."""
     strings, relatednesses = strings_ranked_by_relatedness(query, df)
@@ -74,10 +73,7 @@ find an answer."'
     message = introduction
     for string in strings:
         next_doc = f'\n\nTelegram Message:\n"""\n{string}\n"""'
-        if (
-            num_tokens(message + next_doc + question, model=model)
-            > token_budget
-        ):
+        if num_tokens(message + next_doc + question, model=model) > token_budget:
             break
         else:
             message += next_doc
@@ -105,12 +101,13 @@ answered previously.",
         },
         {"role": "user", "content": message},
     ]
-    response = openai.ChatCompletion.create(
+    resp = openai.ChatCompletion.create(  # type: ignore
         model=model, messages=messages, temperature=0
     )
-    response = cast(ChatCompletion, response) # for type checking
+    response = cast(ChatCompletion, resp)  # for type checking
     response_message = response["choices"][0]["message"]["content"]
     return response_message
+
 
 if __name__ == "__main__":
     ask("What was the punishment for arriving late to Argentina?")
