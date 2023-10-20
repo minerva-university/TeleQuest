@@ -193,7 +193,7 @@ You can use the [Pylance Language Server](https://marketplace.visualstudio.com/i
 
 As mentioned before, we're using type hints with Python. This helps us catch many potential errors early, but we need to be disciplined.
 
-1. Installing a third-party library should be done only when you really need to, and it's not the the Python standard library.
+1. Installing a third-party library should be done only when you really need to, and it's not in the Python standard library.
 2. If you are installing a new library (adding to our requirements), from your root virtual environment (with requirements from `py-requirements.txt`), run 
   ```bash
   pip3 freeze > py-requirements.txt
