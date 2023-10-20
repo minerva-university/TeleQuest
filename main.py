@@ -4,7 +4,7 @@ import sys
 sys.path.append("..")
 import logging
 import telegram
-from bot.responses import start, handle_message
+from responses import start, handle_message
 from telegram.ext import ApplicationBuilder
 from telegram.ext import filters
 from telegram.ext import CommandHandler, MessageHandler
