@@ -1,5 +1,9 @@
-from typing import TypedDict, NotRequired
+from typing import Any, TypedDict, NotRequired, cast
 from pymongo.collection import Collection
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from bot.telegram_types import TMessage
 
 GroupChat = TypedDict(
@@ -10,4 +14,25 @@ GroupChat = TypedDict(
         "categories": list[str],
         "messages": NotRequired[Collection[TMessage]],
     },
+)
+
+PCEmbeddingMetadata = TypedDict("PCEmbeddingMetadata", {"category": str})
+PCEmbeddingData = TypedDict(
+    "PCEmbeddingData",
+    {"id": str, "values": list[float], "metadata": NotRequired[PCEmbeddingMetadata]},
+)
+
+PCQueryResult = TypedDict(
+    "PCQueryResult",
+    {
+        "id": str,
+        "score": float,
+        "values": list[float],
+        "metadata": NotRequired[PCEmbeddingMetadata],
+    },
+)
+
+PCQueryResults = TypedDict(
+    "PCQueryResults",
+    {"matches": list[PCQueryResult], "total": NotRequired[int], "namespace": str},
 )
