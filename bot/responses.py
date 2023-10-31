@@ -2,13 +2,18 @@ import json
 from telegram import Update
 from telegram.ext import ContextTypes
 import sys
+from pathlib import Path
+import os
 
-sys.path.append("..")
+BASE_DIR = os.path.join(Path(__file__).parent.parent)
+sys.path.append(BASE_DIR)
 from db.database import store_message_to_db
 
 
 # import messages.json
-messages = json.load(open("messages.json", encoding="utf-8"))
+messages = json.load(
+    open(os.path.join(BASE_DIR, "bot", "messages.json"), encoding="utf-8")
+)
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

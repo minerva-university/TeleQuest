@@ -1,7 +1,9 @@
 import os
 import sys
+from pathlib import Path
 
-sys.path.append("..")
+BASE_DIR = os.path.join(Path(__file__).parent.parent)
+sys.path.append(BASE_DIR)
 import logging
 import telegram
 from responses import start, handle_message

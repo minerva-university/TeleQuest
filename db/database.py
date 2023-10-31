@@ -3,10 +3,12 @@ import json
 import certifi
 import pymongo
 from telegram import Message
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 import sys
+from pathlib import Path
 
-sys.path.append("..")
+BASE_DIR = os.path.join(Path(__file__).parent.parent)
+sys.path.append(BASE_DIR)
 from db.db_types import GroupChat
 
 

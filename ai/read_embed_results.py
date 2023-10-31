@@ -1,7 +1,10 @@
 import json
+import os
 import sys
+from pathlib import Path
 
-sys.path.append("..")
+BASE_DIR = os.path.join(Path(__file__).parent.parent)
+sys.path.append(BASE_DIR)
 from ai.aitypes import OpenAIJSONL
 
 EMBEDDING_MODEL = "text-embedding-ada-002"  # OpenAI's best embeddings as of Apr 2023
