@@ -1,5 +1,5 @@
 import pinecone
-from typing import Sequence, cast
+from typing import Sequence, cast, List
 from dotenv import load_dotenv
 import os
 import sys
@@ -16,6 +16,33 @@ pinecone.init(
 )
 
 embedding_index: pinecone.Index = pinecone.Index(pinecone.list_indexes()[0])
+
+
+def batch_upload_vectors(index: pinecone.Index, all_embeddings: Sequence[PCEmbeddingData]) -> None:
+    """
+    Takes in a very large list of embedding data, breaks this into batches of maximum size 100 
+    and calls the upload_vectors function on each batch.
+    
+    Parameters
+    ----------
+    index : pinecone.Index
+            The Pinecone index to upload the vectors to.
+    all_embeddings : Sequence[PCEmbeddingData]
+            The list of all message embeddings to upload to the Pinecone index.
+    """
+    
+    # Define the batch size
+    BATCH_SIZE = 100
+    
+    # Calculate the number of batches
+    num_batches = len(all_embeddings) // BATCH_SIZE + (1 if len(all_embeddings) % BATCH_SIZE != 0 else 0)
+    
+    # Loop through each batch and upload
+    for i in range(num_batches):
+        start_idx = i * BATCH_SIZE
+        end_idx = start_idx + BATCH_SIZE
+        batch = all_embeddings[start_idx:end_idx]
+        upload_vectors(index, batch)
 
 
 def upload_vectors(
