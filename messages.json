@@ -1,5 +1,18 @@
 {
-    "start_user":"Hello, {}! I am TeleQuest, a bot designed to help keep group chats cleaner...\nTo get started. Add me to one of your groups as an admin...",
-    "respond_to_question":"One moment please...",
-    "response":"{}\n\n{}"
+    "start_user": "Hello, {}! I am TeleQuest, a bot designed to help keep group chats cleaner... To get started, add me to one of your groups as an admin...",
+    "respond_to_question": "One moment please...",
+    "responses_if_we_ask": {
+        "question_already_answered": "Someone has already answered this question. Here's the response: {\n}",
+        "no_answer_found": "I couldn't find a relevant answer to your question.",
+        "greeting": "Hello! How can I assist you today?",
+        "confirmation": "Was your question answered sufficiently?",
+        "confirmation_yes": "Glad to hear that! Let me know if you have any other questions.",
+        "confirmation_no": "Oh no, let me try again! Here is a correct answer: {}"
+    },
+    "responses_automatic": {
+        "question_already_answered": "Someone has already answered this question. Here's the response: {\n}",
+        "confirmation": "Was your question answered sufficiently?",
+        "confirmation_yes": "Glad to hear that! Let me know if you have any other questions.",
+        "confirmation_no": "Oh no, let me try again! Here is a correct answer: {}"
+    }
 }
