@@ -1,47 +1,88 @@
+@media (min-width: 768px) {
+  .button-53 {
+    padding: 0.75rem 3rem;
+    font-size: 1.25rem;
+  }
+}
 
 .container {
   font-family: 'Arial', sans-serif;
   background-image: linear-gradient(#cae9fd  , #fce2fc );
+  width: 100vw;
+  height: 100vh;
   padding: 20px;
+  color: #0900af;
 }
 
-
-
 h1 {
-  font-size: 2rem;
+  font-size: 5rem;
   font-weight: 700;
-  margin-bottom: 20px;
-  color: #0900af;
+  margin-bottom: 2%;
+  margin-top: 0;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 30;
   font-weight: 700;
-  margin-bottom: 20px;
-  color: #0900af;
+  margin: 0;
 }
 
-p {
-  font-size: 1rem;
-  font-weight: 400;
-  margin-bottom: 20px;
-  color: #0900af;
+h3{
+  margin: 0;
+  font-size: 1.5rem;
 }
+
 header {
   text-align: center;
-  margin-bottom: 20px;
 }
 
 nav {
   display: flex;
-  justify-content: center;
+  justify-content: right;
+  gap: 5%;
   margin-bottom: 20px;
+  margin-right: 3%;
+}
+
+main{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5%;
+}
+
+section{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items:start;
+}
+
+.buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: -webkit-fill-available;
+}
+
+section h2{
+  margin-top: 10%;
+  margin-bottom: 5%;
+}
+
+#bottom-main{
+  margin-top: 20%;
+  width: -webkit-fill-available;
+}
+#tagline{
+  /* margin-top: 20%; */
+  width: -webkit-fill-available;
 }
 
 button {
-  background-color: #5c7bfb;
-  border: 1px solid #D0D0D0;
-  border-radius: 5px;
+  background-color: #5c7cfb00;
+  border: 2.5px solid #0900af;
+  border-radius: 20rem;
   padding: 10px 20px;
   cursor: pointer;
   transition: all 0.3s ease; /* Smoothens the hover effect */
@@ -53,17 +94,11 @@ button:hover {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Slight increase in shadow on hover */
 }
 
-
-
-button:hover {
-  background-color: #E0E0E0;
-}
-
 .main-content {
   text-align: center;
 }
 
-.illustration, .mobile-illustration {
+.illustration, .mobile-illustratiosn {
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -122,10 +157,5 @@ button:hover {
   left: 2px;
 }
 
-@media (min-width: 768px) {
-  .button-53 {
-    padding: 0.75rem 3rem;
-    font-size: 1.25rem;
-  }
-}
+
 
