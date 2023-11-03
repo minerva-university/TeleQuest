@@ -1,5 +1,4 @@
 from typing import Any, TypedDict, NotRequired, cast
-from pymongo.collection import Collection
 import sys
 from pathlib import Path
 
@@ -12,7 +11,7 @@ GroupChat = TypedDict(
         "chat_id": int | None,
         "group_name": str | None,
         "categories": list[str],
-        "messages": NotRequired[Collection[TMessage]],
+        "messages": dict[str, TMessage],
     },
 )
 

@@ -19,7 +19,8 @@ embedding_index: pinecone.Index = pinecone.Index(pinecone.list_indexes()[0])
 
 
 def upload_vectors(
-    index: pinecone.Index, message_embeddings: Sequence[PCEmbeddingData]
+    message_embeddings: Sequence[PCEmbeddingData],
+    index: pinecone.Index = embedding_index,
 ) -> None:
     """
     Uploads a list of message embeddings to the Pinecone index.
@@ -36,10 +37,10 @@ def upload_vectors(
 
 
 def query(
-    index: pinecone.Index,
     query_vector: list[float],
     top_k: int = 5,
     id: str | None = None,
+    index: pinecone.Index = embedding_index,
 ) -> PCQueryResults:
     """Queries the Pinecone index with a query vector."""
     res = index.query(vector=query_vector, top_k=top_k, id=id)

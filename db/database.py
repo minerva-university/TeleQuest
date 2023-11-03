@@ -10,6 +10,7 @@ from pathlib import Path
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
 from db.db_types import GroupChat
+from bot.telegram_types import TMessage
 
 
 load_dotenv()
@@ -40,6 +41,7 @@ def store_message_to_db(chat_id: int | None, msg: Message) -> bool:
                 "chat_id": chat_id,
                 "group_name": msg.chat.title,
                 "categories": [],
+                "messages": {},
             }
         )
 
@@ -70,3 +72,27 @@ def store_message_to_db(chat_id: int | None, msg: Message) -> bool:
         and add_message_result.matched_count > 0
         and add_message_result.modified_count > 0
     )
+
+
+def read_messages_by_ids(chat_id: int | None, message_ids: list[int]) -> list[TMessage]:
+    """
+    This function reads a list of messages from the database given their ids.
+
+    ----
+    Parameters:
+    chat_id: int
+        The chat id of the group chat
+    message_ids: list[int]
+        The list of message ids to be read from the database
+    """
+
+    # get the group chat object from the database
+    group_chat = db.active_groups.find_one({"chat_id": chat_id})
+    if not group_chat:
+        return []
+
+    # get the messages from the group chat object
+    messages = group_chat["messages"]
+
+    # return the messages that have the message ids in the list of message ids
+    return [messages[str(message_id)] for message_id in message_ids]
