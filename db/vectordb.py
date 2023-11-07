@@ -64,13 +64,15 @@ def upload_vectors(
 
 
 def query(
+    chat_id: int,
     query_vector: list[float],
     top_k: int = 5,
-    id: str | None = None,
     index: pinecone.Index = embedding_index,
 ) -> PCQueryResults:
     """Queries the Pinecone index with a query vector."""
-    res = index.query(vector=query_vector, top_k=top_k, id=id)
+    res = index.query(
+        vector=query_vector, top_k=top_k, filter={"chat_id": {"$eq": chat_id}}
+    )
     results = cast(PCQueryResults, res)
     return results
 

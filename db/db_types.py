@@ -15,10 +15,12 @@ GroupChat = TypedDict(
     },
 )
 
-PCEmbeddingMetadata = TypedDict("PCEmbeddingMetadata", {"category": str})
+PCEmbeddingMetadata = TypedDict(
+    "PCEmbeddingMetadata", {"category": NotRequired[str], "chat_id": int}
+)
 PCEmbeddingData = TypedDict(
     "PCEmbeddingData",
-    {"id": str, "values": list[float], "metadata": NotRequired[PCEmbeddingMetadata]},
+    {"id": str, "values": list[float], "metadata": PCEmbeddingMetadata},
 )
 
 PCQueryResult = TypedDict(

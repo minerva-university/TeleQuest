@@ -35,9 +35,9 @@ def main(deploy: bool = False) -> None:
     app.add_handler(CommandHandler("start", start, filters=~filters.ChatType.GROUPS))
     app.add_handler(CommandHandler("help", help, filters=~filters.ChatType.GROUPS))
     app.add_handler(msg_handler)  # add message handler
-    app.add_handler(
-        CommandHandler("question", respond_to_question, filters=filters.ChatType.GROUPS)
-    )  # add specific handler for '/q
+    # app.add_handler(
+    #     CommandHandler("question", respond_to_question, filters=filters.ChatType.GROUPS)
+    # )  # add specific handler for '/q
 
     if deploy:
         # listens for requests from any addresses

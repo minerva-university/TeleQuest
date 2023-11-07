@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
 
-from typing import cast
+from typing import Any, cast
 from ai.aitypes import (
     ChatCompletion,
     EmbedResponseData,
@@ -19,6 +19,7 @@ from scipy import (  # type: ignore
 )  # for calculating vector similarities for search
 from ai.read_chat_export import read_messages
 from ai.read_embed_results import read_embeddings
+from utils import timeout, TimeoutError
 
 load_dotenv()
 
@@ -41,7 +42,8 @@ def query_message(
 ) -> str:
     """Return a message for GPT."""
     introduction = 'The below messages are from individual members of a \
-Telegram group chat. Use them to answer the subsequent question. \
+Telegram group chat. Use them to answer the subsequent question. Keep the answer fairly short \
+and straightforward.\
 If the answer cannot be found in the messages, write "I could not \
 find an answer."'
     question = f"\n\nQuestion: {query}"
@@ -53,6 +55,19 @@ find an answer."'
         else:
             message += next_doc
     return message + question
+
+
+@timeout(5)
+def create_chat_completion(
+    model: str, messages: list[dict], temperature: int, **kwargs: Any
+) -> ChatCompletion:
+    """Create a chat completion request."""
+    return openai.ChatCompletion.create(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+        **kwargs,
+    )  # type: ignore
 
 
 def ask(
@@ -70,18 +85,24 @@ def ask(
     gpt_info = [
         {
             "role": "system",
-            "content": "You have access to messages sent from students who \
-are members to a Telegram group chat and can answer questions you have seen \
-answered previously.",
+            "content": "You have access to messages sent from people who \
+are members of a Telegram group chat and can answer questions you have seen \
+answered previously. Your answers are meant to be concise, but contain all relevant information.",
         },
         {"role": "user", "content": message},
     ]
-    resp = openai.ChatCompletion.create(  # type: ignore
-        model=model, messages=gpt_info, temperature=0
-    )
-    response = cast(ChatCompletion, resp)  # for type checking
-    response_message = response["choices"][0]["message"]["content"]
-    return response_message
+    try:
+        resp = openai.ChatCompletion.create(  # type: ignore
+            model=model,
+            messages=gpt_info,
+            temperature=0,
+        )
+        response = cast(ChatCompletion, resp)  # for type checking
+        response_message = response["choices"][0]["message"]["content"]
+        return response_message
+    except TimeoutError:
+        print("TimeoutError occurred.")
+        return "I could not find an answer."
 
 
 if __name__ == "__main__":

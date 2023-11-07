@@ -1,8 +1,10 @@
+import time
 import openai
 import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
+from openai.error import RateLimitError
 
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
@@ -27,13 +29,23 @@ def embed(messages: list[str]) -> list[list[float]]:
     """
     messages = list(filter(lambda msg: msg != "", messages))
     assert 0 < len(messages) < 2001, "The number of messages must be between 1 and 2000"
-
-    response: EmbedResponseData = openai.Embedding.create(
-        model=EMBEDDING_MODEL, input=messages
-    )  # type: ignore
-    for i, data in enumerate(response["data"]):
-        assert i == data["index"]  # double check embeddings are in same order as input
-    return [data["embedding"] for data in response["data"]]
+    embedded = False
+    seconds_to_wait = 1
+    while not embedded:
+        try:
+            response: EmbedResponseData = openai.Embedding.create(
+                model=EMBEDDING_MODEL, input=messages
+            )  # type: ignore
+            for i, data in enumerate(response["data"]):
+                assert (
+                    i == data["index"]
+                )  # double check embeddings are in same order as input
+            embedded = True
+            return [data["embedding"] for data in response["data"]]
+        except RateLimitError:
+            seconds_to_wait *= 1.2
+            print(f"Rate limit error, waiting {seconds_to_wait} seconds...")
+            time.sleep(seconds_to_wait)
 
 
 if __name__ == "__main__":
