@@ -28,9 +28,9 @@ def store_message_to_db(chat_id: int | None, msg: Message) -> bool:
 
     ----
     Parameters:
-    chat_id: int
+    chat_id: int | None
         The chat id of the group chat
-    msg: telegram.Message
+    msg: telegram.Message | None
         The message object that is to be stored
     """
 
@@ -58,13 +58,21 @@ def store_message_to_db(chat_id: int | None, msg: Message) -> bool:
         "voice": msg.voice,
     }
 
-    # add the message to the messages for that specific group
-    add_message_result = db.active_groups.update_one(
-        {"chat_id": chat_id},
-        {
-            "$set": {f"messages.{msg.message_id}": message},
-        },
+    existing_message = db.active_groups.find_one(
+        {"chat_id": chat_id, f"messages.{msg.message_id}": {"$exists": True}}
     )
+
+    if not existing_message:
+        # If the message is not in the database, add it to the messages for that specific group
+        add_message_result = db.active_groups.update_one(
+            {"chat_id": chat_id},
+            {
+                "$set": {f"messages.{msg.message_id}": message},
+            },
+        )
+    else:
+        # Handle the case where the message already exists, if necessary
+        print("Message already exists in the database.")
 
     # return true if the message was successfully acknowledged by the db, and if the message was successfully modified
     return (

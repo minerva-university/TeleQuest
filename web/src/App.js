@@ -1,10 +1,10 @@
-import React from 'react';
-import './App.css';
-import robot from './robot.svg';
+import React from "react";
+import "./App.css";
+import robot from "./robot.svg";
 
-import JSConfetti from 'js-confetti'
+import JSConfetti from "js-confetti";
 
-const jsConfetti = new JSConfetti()
+const jsConfetti = new JSConfetti();
 
 const App = () => {
   const triggerConfetti = () => {
@@ -12,11 +12,7 @@ const App = () => {
   };
   return (
     <div className="container">
-      <header>
-        <h1>Telequest</h1>
-        <p>A unique answer to your questions.</p>
-        <p>Available exclusively at Telegram.</p>
-      </header>
+      {/* I think need to move this one to a navbar up top? */}
 
       <nav>
         <button>Home</button>
@@ -24,27 +20,38 @@ const App = () => {
         <button>Contact</button>
       </nav>
 
-      <section className="main-content">
-        <h2>Great for big Telegram chats</h2>
-        <p>Powered by OpenAI API.</p>
-        <button>Get Started</button>
+      <main>
+        <header>
+          <section className="main-content">
+            <h1>TeleQuest</h1>
+            <div id="tagline">
+              <h3>A unique answer</h3>
+              <h3>to the same questions.</h3>
+            </div>
+
+            <h2><br/><br/>Great for large Telegram** groups</h2>
+
+            <div className="buttons">
+              <button>Get Started</button>
+            </div>
+
+            <div id="bottom-main">
+              <p>**Exclusively available through Telegram</p>
+              <div className="buttons">
+                <button class="hoverme" onClick={triggerConfetti}>
+                  <span>Click for confetti.</span>
+                </button>
+              </div>
+            </div>
+          </section>
+        </header>
 
         <div className="illustration">
           <img src={robot} alt="Chatbot Illustration" />
         </div>
-
-        <h3>Currently in development
-        </h3>
-        <p>Release date: when it's ready</p>
-        <button class='hoverme' onClick={triggerConfetti}> 
-  <span>
-    Click for confetti.
-  </span>
-
-</button>
-      </section>
+      </main>
     </div>
   );
-}
+};
 
 export default App;
