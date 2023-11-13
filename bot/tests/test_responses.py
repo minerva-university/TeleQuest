@@ -1,10 +1,8 @@
-import asyncio
 import unittest
 from unittest.mock import AsyncMock, patch
-from telegram import Update, Message, Chat, User
-from telegram.ext import ContextTypes
+from telegram import Update, Message, Chat
 
-import responses  # Your responses module
+from responses import start, help
 
 
 class TestResponses(unittest.TestCase):
@@ -31,11 +29,11 @@ class TestResponses(unittest.TestCase):
         },
     )
     @patch("responses.store_message_to_db")
-    async def test_start(self, mock_messages, mock_store_message_to_db):
+    async def test_start(self, mock_messages, mock_store_message_to_db) -> None:
         self.update.effective_chat.first_name = "TestUser"
         self.context.bot.send_message = AsyncMock()
 
-        await responses.start(self.update, self.context)
+        await start(self.update, self.context)
 
         self.context.bot.send_message.assert_awaited_once_with(
             chat_id=12345, text="Welcome, TestUser!"
@@ -52,17 +50,17 @@ class TestResponses(unittest.TestCase):
             "respond_to_question": "Responding to question: {}",
         },
     )
-    async def test_help(self, mock_messages, mock_store_message_to_db):
+    async def test_help(self, mock_messages, mock_store_message_to_db) -> None:
         self.update.effective_chat.first_name = "TestUser"
         self.context.bot.send_message = AsyncMock()
 
-        await responses.help(self.update, self.context)
+        await help(self.update, self.context)
 
         self.context.bot.send_message.assert_awaited_once_with(
             chat_id=12345, text="Help message for TestUser, "
         )
 
-    def test_handle_message(self):
+    def test_handle_message(self) -> None:
         # More complex due to different branches in the function
         # You'll need to test different message types and contents
         pass

@@ -9,7 +9,7 @@ from pathlib import Path
 
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
-from db.db_types import GroupChat
+from db.db_types import GroupChat, AddMessageResult
 
 
 load_dotenv()
@@ -21,7 +21,7 @@ client: pymongo.MongoClient[GroupChat] = pymongo.MongoClient(
 db = client[os.getenv("DB_NAME", "")]
 
 
-def store_message_to_db(chat_id: int | None, msg: Message) -> bool:
+def store_message_to_db(chat_id: int | None, msg: Message) -> AddMessageResult:
     """
     This function stores a given message to the database
 
@@ -61,20 +61,19 @@ def store_message_to_db(chat_id: int | None, msg: Message) -> bool:
     )
 
     if not existing_message:
-        # If the message is not in the database, add it to the messages for that specific group
         add_message_result = db.active_groups.update_one(
             {"chat_id": chat_id},
             {
                 "$set": {f"messages.{msg.message_id}": message},
             },
         )
+        if (
+            add_message_result.acknowledged
+            and add_message_result.matched_count > 0
+            and add_message_result.modified_count > 0
+        ):
+            return AddMessageResult.SUCCESS
+        else:
+            return AddMessageResult.FAILURE
     else:
-        # Handle the case where the message already exists, if necessary
-        print("Message already exists in the database.")
-
-    # return true if the message was successfully acknowledged by the db, and if the message was successfully modified
-    return (
-        add_message_result.acknowledged
-        and add_message_result.matched_count > 0
-        and add_message_result.modified_count > 0
-    )
+        return AddMessageResult.EXISTING

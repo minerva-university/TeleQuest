@@ -1,6 +1,7 @@
 from typing import Any, TypedDict, NotRequired, cast
 from pymongo.collection import Collection
 import sys
+from enum import Enum
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent.absolute()))
@@ -15,6 +16,13 @@ GroupChat = TypedDict(
         "messages": NotRequired[Collection[TMessage]],
     },
 )
+
+
+class AddMessageResult(Enum):
+    SUCCESS = "Success"
+    FAILURE = "Failure"
+    EXISTING = "Existing"
+
 
 PCEmbeddingMetadata = TypedDict("PCEmbeddingMetadata", {"category": str})
 PCEmbeddingData = TypedDict(

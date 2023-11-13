@@ -5,6 +5,7 @@ from db_types import (
     PCEmbeddingData,
     PCQueryResult,
     PCQueryResults,
+    AddMessageResult,
 )
 
 
@@ -42,3 +43,14 @@ class TestDbTypes(unittest.TestCase):
             matches=[], total=10, namespace="namespace1"
         )
         self.assertIsInstance(pc_query_results, dict)
+
+    def test_add_message_result_type(self) -> None:
+        # Check that all expected members are present in AddMessageResult
+        self.assertTrue(AddMessageResult.SUCCESS in AddMessageResult)
+        self.assertTrue(AddMessageResult.FAILURE in AddMessageResult)
+        self.assertTrue(AddMessageResult.EXISTING in AddMessageResult)
+
+        # Check that members are of the correct enum type
+        self.assertIsInstance(AddMessageResult.SUCCESS, AddMessageResult)
+        self.assertIsInstance(AddMessageResult.FAILURE, AddMessageResult)
+        self.assertIsInstance(AddMessageResult.EXISTING, AddMessageResult)
