@@ -17,7 +17,7 @@ jobs:
       
     - name: Set Environment Variables
       run: |
-        echo "DB_NAME="telequest" >> $GITHUB_ENV
+        echo "DB_NAME=telequest" >> $GITHUB_ENV
         echo "BOT_TOKEN=bot_token_key" >> $GITHUB_ENV
         echo "MONGO_URI=mongo_db_key" >> $GITHUB_ENV
         echo "PINECONE_KEY=your_pinecone_key" >> $GITHUB_ENV
