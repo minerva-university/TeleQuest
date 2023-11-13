@@ -22,6 +22,7 @@ jobs:
         echo "MONGO_URI=mongo_db_key" >> $GITHUB_ENV
         echo "PINECONE_KEY=your_pinecone_key" >> $GITHUB_ENV
         echo "PINECONE_ENV=your_pinecone_env" >> $GITHUB_ENV
+        echo "ENVIRONMENT=TEST" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: |
