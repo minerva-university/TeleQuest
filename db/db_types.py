@@ -1,4 +1,3 @@
-import datetime
 import json
 import sys
 from datetime import datetime
@@ -35,7 +34,7 @@ class SerializedMessage:
         self.from_user: Union[Dict[str, Any], None] = (
             json.loads(msg.from_user.to_json()) if msg.from_user else None
         )
-        self.date = msg.date
+        self.date: datetime = msg.date
         self.reply_to_message: Union[int, None] = (
             msg.reply_to_message.message_id if msg.reply_to_message else None
         )
