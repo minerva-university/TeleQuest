@@ -2,12 +2,15 @@ import unittest
 from unittest.mock import patch, MagicMock
 from telegram import Message
 from database import store_message_to_db, AddMessageResult
+from typing import Any
 
 
 class TestStoreMessageToDb(unittest.TestCase):
     @patch("database.db")
     @patch("telegram.Message")
-    def test_store_new_message(self, mock_message: MagicMock, mock_db: MagicMock):
+    def test_store_new_message(
+        self, mock_message: MagicMock, mock_db: MagicMock
+    ) -> None:
         # Mock setup for a new message
         mock_message.configure_mock(
             **{
@@ -23,20 +26,22 @@ class TestStoreMessageToDb(unittest.TestCase):
             }
         )
         mock_db.active_groups.find_one.return_value = None
-        update_one_return = MagicMock(
+        update_one_return: MagicMock = MagicMock(
             acknowledged=True, matched_count=1, modified_count=1
         )
         mock_db.active_groups.update_one.return_value = update_one_return
 
         # Act
-        result = store_message_to_db(chat_id=12345, msg=mock_message)
+        result: AddMessageResult = store_message_to_db(chat_id=12345, msg=mock_message)
 
         # Assert
         self.assertEqual(result, AddMessageResult.SUCCESS)
 
     @patch("database.db")
     @patch("telegram.Message")
-    def test_store_existing_message(self, mock_message: MagicMock, mock_db: MagicMock):
+    def test_store_existing_message(
+        self, mock_message: MagicMock, mock_db: MagicMock
+    ) -> None:
         # Mock setup for an existing message
         mock_message.configure_mock(
             **{
@@ -53,15 +58,16 @@ class TestStoreMessageToDb(unittest.TestCase):
         ]
 
         # Act
-        result = store_message_to_db(chat_id=12345, msg=mock_message)
+        result: AddMessageResult = store_message_to_db(chat_id=12345, msg=mock_message)
 
         # Assert
         self.assertEqual(result, AddMessageResult.EXISTING)
 
-    # Additional test for FAILURE case
     @patch("database.db")
     @patch("telegram.Message")
-    def test_store_message_failure(self, mock_message: MagicMock, mock_db: MagicMock):
+    def test_store_message_failure(
+        self, mock_message: MagicMock, mock_db: MagicMock
+    ) -> None:
         # Mock setup for failure scenario
         mock_message.configure_mock(
             **{
@@ -73,13 +79,13 @@ class TestStoreMessageToDb(unittest.TestCase):
             }
         )
         mock_db.active_groups.find_one.return_value = None
-        update_one_return = MagicMock(
+        update_one_return: MagicMock = MagicMock(
             acknowledged=False, matched_count=0, modified_count=0
         )
         mock_db.active_groups.update_one.return_value = update_one_return
 
         # Act
-        result = store_message_to_db(chat_id=12345, msg=mock_message)
+        result: AddMessageResult = store_message_to_db(chat_id=12345, msg=mock_message)
 
         # Assert
         self.assertEqual(result, AddMessageResult.FAILURE)

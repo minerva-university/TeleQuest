@@ -1,13 +1,16 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from vectordb import batch_upload_vectors, query, delete, upload_vectors
+from typing import List, Dict, Any
 
 
 class TestVectorDB(unittest.TestCase):
     @patch("vectordb.pinecone.Index")
-    def test_upload_vectors(self, mock_index):
+    def test_upload_vectors(self, mock_index: MagicMock) -> None:
         # Arrange
-        mock_embeddings = [{"id": "1", "values": [0.1, 0.2], "metadata": {}}]
+        mock_embeddings: List[Dict[str, Any]] = [
+            {"id": "1", "values": [0.1, 0.2], "metadata": {}}
+        ]
         mock_index.upsert = MagicMock()
 
         # Act
@@ -18,9 +21,13 @@ class TestVectorDB(unittest.TestCase):
 
     @patch("vectordb.init_pinecone", return_value=MagicMock())
     @patch("vectordb.upload_vectors")
-    def test_batch_upload_vectors(self, mock_upload_vectors, mock_init_pinecone):
+    def test_batch_upload_vectors(
+        self, mock_upload_vectors: MagicMock, mock_init_pinecone: MagicMock
+    ) -> None:
         # Arrange
-        mock_embeddings = [{"id": "1", "values": [0.1, 0.2], "metadata": {}}] * 250
+        mock_embeddings: List[Dict[str, Any]] = [
+            {"id": "1", "values": [0.1, 0.2], "metadata": {}}
+        ] * 250
         mock_index = MagicMock()
 
         # Act
@@ -32,9 +39,9 @@ class TestVectorDB(unittest.TestCase):
 
     @patch("vectordb.init_pinecone", return_value=MagicMock())
     @patch("vectordb.pinecone.Index")
-    def test_query(self, mock_index, mock_init_pinecone):
+    def test_query(self, mock_index: MagicMock, mock_init_pinecone: MagicMock) -> None:
         # Arrange
-        mock_query_vector = [0.1, 0.2]
+        mock_query_vector: List[float] = [0.1, 0.2]
         mock_index.query.return_value = {"matches": [], "total": 0, "namespace": "test"}
 
         # Act
@@ -46,9 +53,11 @@ class TestVectorDB(unittest.TestCase):
 
     @patch("vectordb.init_pinecone", return_value=MagicMock())
     @patch("vectordb.pinecone")
-    def test_delete(self, mock_pinecone, mock_init_pinecone):
+    def test_delete(
+        self, mock_pinecone: MagicMock, mock_init_pinecone: MagicMock
+    ) -> None:
         # Arrange
-        index_name = "test_index"
+        index_name: str = "test_index"
 
         # Act
         delete(index_name)

@@ -1,22 +1,26 @@
 import unittest
 from unittest.mock import AsyncMock, patch
 from telegram import Update, Message, Chat
-
 from responses import start, help
+from typing import Dict
+from datetime import datetime
 
 
 class TestResponses(unittest.TestCase):
-    def setUp(self):
-        self.update = Update(
+    def setUp(self) -> None:
+        chat = Chat(
+            id=12345, type="private", first_name="TestUser"
+        )  # Create a Chat object with first_name
+        self.update: Update = Update(
             update_id=1,
             message=Message(
                 message_id=1,
-                date=None,
-                chat=Chat(id=12345, type="private"),
+                date=datetime.now(),
+                chat=chat,
                 text="Test",
             ),
         )
-        self.context = AsyncMock()
+        self.context: AsyncMock = AsyncMock()
 
     @patch(
         "responses.messages",
@@ -29,8 +33,9 @@ class TestResponses(unittest.TestCase):
         },
     )
     @patch("responses.store_message_to_db")
-    async def test_start(self, mock_messages, mock_store_message_to_db) -> None:
-        self.update.effective_chat.first_name = "TestUser"
+    async def test_start(
+        self, mock_messages: Dict[str, str], mock_store_message_to_db: AsyncMock
+    ) -> None:
         self.context.bot.send_message = AsyncMock()
 
         await start(self.update, self.context)
@@ -50,8 +55,9 @@ class TestResponses(unittest.TestCase):
             "respond_to_question": "Responding to question: {}",
         },
     )
-    async def test_help(self, mock_messages, mock_store_message_to_db) -> None:
-        self.update.effective_chat.first_name = "TestUser"
+    async def test_help(
+        self, mock_messages: Dict[str, str], mock_store_message_to_db: AsyncMock
+    ) -> None:
         self.context.bot.send_message = AsyncMock()
 
         await help(self.update, self.context)
@@ -59,8 +65,3 @@ class TestResponses(unittest.TestCase):
         self.context.bot.send_message.assert_awaited_once_with(
             chat_id=12345, text="Help message for TestUser, "
         )
-
-    def test_handle_message(self) -> None:
-        # More complex due to different branches in the function
-        # You'll need to test different message types and contents
-        pass

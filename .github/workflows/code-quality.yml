@@ -16,4 +16,4 @@ jobs:
     - run: pip install -r mypy-requirements.txt
     - run: pip install "black<23"
     - run: black --diff --check $(git ls-files '*.py')
-    - run: mypy $(git ls-files '*.py' | grep -v 'test_')
+    - run: mypy $(git ls-files '*.py')
