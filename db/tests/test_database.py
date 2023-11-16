@@ -1,93 +1,50 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from telegram import Message
-from typing import Any
-
-from db.database import store_message_to_db
+from db.database import store_message_to_db, client, db
 from db.db_types import AddMessageResult
+from telegram import Message, User, Chat
+from datetime import datetime
 
 
-class TestStoreMessageToDb(unittest.TestCase):
-    @patch("database.db")
-    @patch("telegram.Message")
-    def test_store_new_message(
-        self, mock_message: MagicMock, mock_db: MagicMock
-    ) -> None:
-        # Mock setup for a new message
-        mock_message.configure_mock(
-            **{
-                "from_user.to_json.return_value": '{"id": 123, "name": "Test User"}',
-                "chat.title": "Test Chat",
-                "reply_to_message": None,
-                "date": "2021-01-01",
-                "message_id": 1,
-                "text": "Hello",
-                "photo": None,
-                "video": None,
-                "voice": None,
-            }
+class TestDatabase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.chat_id = 12345
+        self.user = User(id=123, first_name="Test", is_bot=False)
+        self.chat = Chat(id=self.chat_id, type="group", title="Test Group")
+        self.message = Message(
+            message_id=1,
+            date=datetime.now(),  # Use the current datetime
+            from_user=self.user,
+            chat=self.chat,
+            text="Test message",
         )
-        mock_db.active_groups.find_one.return_value = None
-        update_one_return: MagicMock = MagicMock(
+
+    @patch("db.database.db")
+    def test_store_message_to_db_new(self, mock_db: MagicMock) -> None:
+        # Setup for a scenario where the message is new (not existing in the DB)
+        mock_db.active_groups.find_one.side_effect = [None, None]
+        mock_db.active_groups.insert_one.return_value = MagicMock()
+        mock_db.active_groups.update_one.return_value = MagicMock(
             acknowledged=True, matched_count=1, modified_count=1
         )
-        mock_db.active_groups.update_one.return_value = update_one_return
 
-        # Act
-        result: AddMessageResult = store_message_to_db(chat_id=12345, msg=mock_message)
-
-        # Assert
+        result = store_message_to_db(self.chat_id, self.message)
         self.assertEqual(result, AddMessageResult.SUCCESS)
 
-    @patch("database.db")
-    @patch("telegram.Message")
-    def test_store_existing_message(
-        self, mock_message: MagicMock, mock_db: MagicMock
-    ) -> None:
-        # Mock setup for an existing message
-        mock_message.configure_mock(
-            **{
-                "message_id": 1,
-                "chat.title": "Test Chat",
-                "from_user.to_json.return_value": '{"id": 123, "name": "Test User"}',
-                "date": "2021-01-01",
-                "reply_to_message": None,
-            }
-        )
-        mock_db.active_groups.find_one.side_effect = [
-            True,  # First call for checking group chat existence
-            True,  # Second call for checking message existence
-        ]
+    @patch("db.database.db")
+    def test_store_message_to_db_existing(self, mock_db: MagicMock) -> None:
+        # Setup for a scenario where the message already exists
+        mock_db.active_groups.find_one.side_effect = [True, True]
 
-        # Act
-        result: AddMessageResult = store_message_to_db(chat_id=12345, msg=mock_message)
-
-        # Assert
+        result = store_message_to_db(self.chat_id, self.message)
         self.assertEqual(result, AddMessageResult.EXISTING)
 
-    @patch("database.db")
-    @patch("telegram.Message")
-    def test_store_message_failure(
-        self, mock_message: MagicMock, mock_db: MagicMock
-    ) -> None:
-        # Mock setup for failure scenario
-        mock_message.configure_mock(
-            **{
-                "message_id": 1,
-                "chat.title": "Test Chat",
-                "from_user.to_json.return_value": '{"id": 123, "name": "Test User"}',
-                "date": "2021-01-01",
-                "reply_to_message": None,
-            }
-        )
-        mock_db.active_groups.find_one.return_value = None
-        update_one_return: MagicMock = MagicMock(
-            acknowledged=False, matched_count=0, modified_count=0
-        )
-        mock_db.active_groups.update_one.return_value = update_one_return
+    @patch("db.database.db")
+    def test_store_message_to_db_failure(self, mock_db: MagicMock) -> None:
+        # Setup for a scenario where storing the message fails
+        mock_db.active_groups.find_one.side_effect = [None, None]
+        mock_db.active_groups.insert_one.return_value = MagicMock()
+        mock_db.active_groups.update_one.return_value = MagicMock(acknowledged=False)
 
-        # Act
-        result: AddMessageResult = store_message_to_db(chat_id=12345, msg=mock_message)
-
-        # Assert
+        result = store_message_to_db(self.chat_id, self.message)
         self.assertEqual(result, AddMessageResult.FAILURE)
