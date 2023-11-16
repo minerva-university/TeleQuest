@@ -70,16 +70,16 @@ def store_message_to_db(chat_id: int | None, msg: Message) -> bool:
                 "$set": {f"messages.{msg.message_id}": message},
             },
         )
+        # return true if the message was successfully acknowledged by the db, and if the message was successfully modified
+        return (
+            add_message_result.acknowledged
+            and add_message_result.matched_count > 0
+            and add_message_result.modified_count > 0
+        )
     else:
         # Handle the case where the message already exists, if necessary
         print("Message already exists in the database.")
-
-    # return true if the message was successfully acknowledged by the db, and if the message was successfully modified
-    return (
-        add_message_result.acknowledged
-        and add_message_result.matched_count > 0
-        and add_message_result.modified_count > 0
-    )
+        return False
 
 
 def read_messages_by_ids(chat_id: int | None, message_ids: list[int]) -> list[TMessage]:

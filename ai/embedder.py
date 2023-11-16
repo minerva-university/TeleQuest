@@ -30,7 +30,7 @@ def embed(messages: list[str]) -> list[list[float]]:
     messages = list(filter(lambda msg: msg != "", messages))
     assert 0 < len(messages) < 2001, "The number of messages must be between 1 and 2000"
     embedded = False
-    seconds_to_wait = 1
+    seconds_to_wait: float = 1
     while not embedded:
         try:
             response: EmbedResponseData = openai.Embedding.create(
@@ -41,11 +41,11 @@ def embed(messages: list[str]) -> list[list[float]]:
                     i == data["index"]
                 )  # double check embeddings are in same order as input
             embedded = True
-            return [data["embedding"] for data in response["data"]]
         except RateLimitError:
             seconds_to_wait *= 1.2
             print(f"Rate limit error, waiting {seconds_to_wait} seconds...")
             time.sleep(seconds_to_wait)
+    return [data["embedding"] for data in response["data"]]  # type: ignore
 
 
 if __name__ == "__main__":

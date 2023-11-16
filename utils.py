@@ -1,12 +1,16 @@
 from threading import Thread
 from functools import wraps
+from typing import Any, Callable, TypeVar
+
+T = TypeVar("T")
+U = TypeVar("U")
 
 
 class TimeoutError(Exception):
     pass
 
 
-def timeout(timeout: int):
+def timeout(timeout: int) -> Callable[[Callable[..., T]], Callable[..., T]]:
     """
     Parameters
     ----------
@@ -14,16 +18,16 @@ def timeout(timeout: int):
         timeout in seconds
     """
 
-    def deco(func):
+    def deco(func: Callable[..., T]) -> Callable[..., T]:
         @wraps(func)
-        def wrapper(*args, **kwargs):
-            res: list = [
+        def wrapper(*args: Any, **kwargs: Any) -> T:
+            res: list[Exception | T] = [
                 TimeoutError(
                     f"function {func.__name__} timeout [{timeout} seconds] exceeded!"
                 )
             ]
 
-            def newFunc():
+            def newFunc() -> None:
                 try:
                     res[0] = func(*args, **kwargs)
                 except Exception as e:

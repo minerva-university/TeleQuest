@@ -59,15 +59,16 @@ find an answer."'
 
 @timeout(5)
 def create_chat_completion(
-    model: str, messages: list[dict], temperature: int, **kwargs: Any
+    model: str, messages: list[dict[str, str]], temperature: int, **kwargs: Any
 ) -> ChatCompletion:
     """Create a chat completion request."""
-    return openai.ChatCompletion.create(
+    chat_comp = openai.ChatCompletion.create(
         model=model,
         messages=messages,
         temperature=temperature,
         **kwargs,
     )  # type: ignore
+    return cast(ChatCompletion, chat_comp)
 
 
 def ask(

@@ -110,10 +110,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                 await respond_to_question(
                     msg.reply_to_message.text, chat_id, msg.message_id, context
                 )
-                # _ = chat_id and await context.bot.send_message(
-                #     chat_id=chat_id,
-                #     text=messages["respond_to_question"].format(question),
-                # )
         else:
             _ = chat_id and await context.bot.send_message(
                 chat_id=chat_id,
@@ -140,42 +136,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                 }
             ]
         )
-        print("Uploaded data.")
-        # await context.bot.send_message(chat_id=chat_id, text="Success.")
-
-
-async def respond_to_question_(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
-) -> None:
-    """
-    This function is the response of the bot when a user sends a question
-    ---
-    Parameters:
-    update: telegram.Update
-        The update object that is received from the telegram bot
-    context: telegram.ext.Context
-        The context object that is received from the telegram bot.
-    """
-    effective_chat = update.effective_chat
-    message = update.message
-    chat_id = effective_chat.id if effective_chat else None
-    if not chat_id or not message:
-        return
-    if not message.text:
-        return
-    print(message.text)
-    # embedding_ = embed([message.text])
-    # embedding: list[float] = embedding_[0]
-    # top_3 = query(embedding, top_k=3, id=f"{chat_id}:{message.message_id}")["matches"]
-    # msg_ids: list[int] = [int(msg["id"]) for msg in top_3]
-    # messages = read_messages_by_ids(chat_id, msg_ids)
-    # message_texts: list[str] = filter(
-    #     lambda t: isinstance(t, str), [msg["text"] for msg in messages]
-    # )  # type: ignore
-    # message_texts = list(message_texts)
-    # resp = ask(message.text, message_texts, print_message=True)
-    # if resp:
-    #     await context.bot.send_message(chat_id=chat_id, text=resp)
 
 
 async def respond_to_question(
@@ -188,7 +148,6 @@ async def respond_to_question(
     question: str
         The question to respond to.
     """
-    # id=f"{chat_id}:{message_id}"
     print(question)
     embedding_ = embed([question])
     embedding: list[float] = embedding_[0]

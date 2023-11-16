@@ -6,7 +6,7 @@ BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
 import logging
 import telegram
-from bot.responses import start, help, handle_message, respond_to_question
+from bot.responses import start, help, handle_message
 from telegram.ext import ApplicationBuilder
 from telegram.ext import filters
 from telegram.ext import CommandHandler, MessageHandler
@@ -35,9 +35,6 @@ def main(deploy: bool = False) -> None:
     app.add_handler(CommandHandler("start", start, filters=~filters.ChatType.GROUPS))
     app.add_handler(CommandHandler("help", help, filters=~filters.ChatType.GROUPS))
     app.add_handler(msg_handler)  # add message handler
-    # app.add_handler(
-    #     CommandHandler("question", respond_to_question, filters=filters.ChatType.GROUPS)
-    # )  # add specific handler for '/q
 
     if deploy:
         # listens for requests from any addresses
