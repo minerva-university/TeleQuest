@@ -1,13 +1,15 @@
 import os
 import sys
 from pathlib import Path
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
+from bot.helpers import BASE_DIR, find_bot_command, messages, send_help_response
 from db.database import store_message_to_db
-from bot.helpers import find_bot_command, send_help_response, BASE_DIR, messages
+from db.db_types import SerializedMessage
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -119,4 +121,5 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         )
 
         # TODO: Logic for when to store to the database.
-        store_message = msg and store_message_to_db(chat_id, msg)
+        message: SerializedMessage | None = SerializedMessage(msg) if msg else None
+        store_message = message and store_message_to_db(chat_id, message)

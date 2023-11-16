@@ -1,9 +1,11 @@
 import unittest
-from unittest.mock import patch, MagicMock
-from db.database import store_message_to_db, client, db
-from db.db_types import AddMessageResult
-from telegram import Message, User, Chat
 from datetime import datetime
+from unittest.mock import MagicMock, patch
+
+from telegram import Chat, Message, User
+
+from db.database import store_message_to_db
+from db.db_types import AddMessageResult, SerializedMessage
 
 
 class TestDatabase(unittest.TestCase):
@@ -13,38 +15,59 @@ class TestDatabase(unittest.TestCase):
         self.chat = Chat(id=self.chat_id, type="group", title="Test Group")
         self.message = Message(
             message_id=1,
-            date=datetime.now(),  # Use the current datetime
+            date=datetime.now(),
             from_user=self.user,
             chat=self.chat,
             text="Test message",
         )
+        self.serialized_message = SerializedMessage(self.message)
 
     @patch("db.database.db")
     def test_store_message_to_db_new(self, mock_db: MagicMock) -> None:
-        # Setup for a scenario where the message is new (not existing in the DB)
         mock_db.active_groups.find_one.side_effect = [None, None]
         mock_db.active_groups.insert_one.return_value = MagicMock()
         mock_db.active_groups.update_one.return_value = MagicMock(
             acknowledged=True, matched_count=1, modified_count=1
         )
 
-        result = store_message_to_db(self.chat_id, self.message)
+        result = store_message_to_db(self.chat_id, self.serialized_message)
         self.assertEqual(result, AddMessageResult.SUCCESS)
 
     @patch("db.database.db")
     def test_store_message_to_db_existing(self, mock_db: MagicMock) -> None:
-        # Setup for a scenario where the message already exists
         mock_db.active_groups.find_one.side_effect = [True, True]
 
-        result = store_message_to_db(self.chat_id, self.message)
+        result = store_message_to_db(self.chat_id, self.serialized_message)
         self.assertEqual(result, AddMessageResult.EXISTING)
 
     @patch("db.database.db")
     def test_store_message_to_db_failure(self, mock_db: MagicMock) -> None:
-        # Setup for a scenario where storing the message fails
         mock_db.active_groups.find_one.side_effect = [None, None]
         mock_db.active_groups.insert_one.return_value = MagicMock()
         mock_db.active_groups.update_one.return_value = MagicMock(acknowledged=False)
 
-        result = store_message_to_db(self.chat_id, self.message)
+        result = store_message_to_db(self.chat_id, self.serialized_message)
         self.assertEqual(result, AddMessageResult.FAILURE)
+
+    @patch("db.database.db")
+    def test_store_message_to_db_new_group(self, mock_db: MagicMock) -> None:
+        mock_db.active_groups.find_one.return_value = None
+        mock_db.active_groups.insert_one.return_value = MagicMock()
+        mock_db.active_groups.update_one.return_value = MagicMock(
+            acknowledged=True, matched_count=1, modified_count=1
+        )
+
+        result = store_message_to_db(self.chat_id, self.serialized_message)
+        self.assertEqual(result, AddMessageResult.SUCCESS)
+
+    @patch("db.database.db")
+    def test_store_message_to_db_existing_message(self, mock_db: MagicMock) -> None:
+        mock_db.active_groups.find_one.return_value = {
+            "chat_id": self.chat_id,
+            "group_name": self.chat.title,
+            "categories": [],
+            "messages": {self.message.message_id: self.message.to_dict()},
+        }
+
+        result = store_message_to_db(self.chat_id, self.serialized_message)
+        self.assertEqual(result, AddMessageResult.EXISTING)
