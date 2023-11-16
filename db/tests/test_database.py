@@ -97,7 +97,7 @@ class TestStoreMessagesToDB(unittest.TestCase):
         ]
 
     @patch("db.database.db")
-    def test_store_messages_to_db(self, mock_db: MagicMock) -> None:
+    def test_store_multiple_messages_to_db(self, mock_db: MagicMock) -> None:
         mock_db.active_groups.find_one.side_effect = [None, None]
         mock_db.active_groups.insert_one.return_value = MagicMock()
         mock_db.active_groups.update_one.return_value = MagicMock(
@@ -106,8 +106,6 @@ class TestStoreMessagesToDB(unittest.TestCase):
 
         result = store_multiple_messages_to_db(self.chat_id, self.serialized_messages)
         self.assertEqual(result, AddMessageResult.SUCCESS)
-
-        # Add assertions for any additional checks you want to make
 
 
 if __name__ == "__main__":

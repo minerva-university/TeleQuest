@@ -1,5 +1,6 @@
 import unittest
-
+import json
+from unittest.mock import MagicMock
 from db.db_types import (
     GroupChat,
     PCEmbeddingMetadata,
@@ -7,9 +8,10 @@ from db.db_types import (
     PCQueryResult,
     PCQueryResults,
     AddMessageResult,
+    SerializedMessage,
 )
-from pymongo.collection import Collection
-from typing import cast
+from datetime import datetime
+from telegram import Message, Chat, User, PhotoSize, Video, Voice
 
 
 class TestDbTypes(unittest.TestCase):
@@ -61,3 +63,47 @@ class TestDbTypes(unittest.TestCase):
         self.assertIsInstance(AddMessageResult.SUCCESS, AddMessageResult)
         self.assertIsInstance(AddMessageResult.FAILURE, AddMessageResult)
         self.assertIsInstance(AddMessageResult.EXISTING, AddMessageResult)
+
+
+class TestSerializedMessage(unittest.TestCase):
+    def setUp(self) -> None:
+        self.user = User(id=123, first_name="Test", is_bot=False)
+        self.chat = Chat(id=12345, type="group", title="Test Group")
+        self.message = Message(
+            message_id=1,
+            date=datetime.now(),
+            from_user=self.user,
+            chat=self.chat,
+            text="Test message",
+        )
+        self.serialized_message = SerializedMessage(self.message)
+
+    def test_serialized_message_init(self) -> None:
+        self.assertEqual(self.serialized_message.id, self.message.message_id)
+        self.assertEqual(
+            self.serialized_message.from_user, json.loads(self.user.to_json())
+        )
+        self.assertEqual(self.serialized_message.date, self.message.date)
+        self.assertEqual(self.serialized_message.reply_to_message, None)
+        self.assertEqual(self.serialized_message.text, self.message.text)
+        self.assertEqual(self.serialized_message.photo, ())
+        self.assertIsNone(self.serialized_message.video)
+        self.assertIsNone(self.serialized_message.voice)
+        self.assertEqual(self.serialized_message.chat_title, self.chat.title)
+
+    def test_get_serialized_without_id(self) -> None:
+        serialized_without_id = self.serialized_message.get_serialized_without_id()
+        expected_result = {
+            "from_user": json.loads(self.user.to_json()),
+            "date": self.message.date,
+            "reply_to_message": None,
+            "text": self.message.text,
+            "photo": (),  # Change this line
+            "video": None,
+            "voice": None,
+            "chat_title": self.chat.title,
+        }
+        self.assertEqual(serialized_without_id, expected_result)
+
+    def test_get_id(self) -> None:
+        self.assertEqual(self.serialized_message.get_id(), self.message.message_id)
