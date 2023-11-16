@@ -1,5 +1,5 @@
 import pinecone
-from typing import Sequence, cast
+from typing import Sequence, cast, Optional
 from dotenv import load_dotenv
 import os
 import sys
@@ -11,11 +11,21 @@ from db.db_types import PCEmbeddingData, PCQueryResults
 
 load_dotenv()
 
-pinecone.init(
-    api_key=os.environ["PINECONE_KEY"], environment=os.environ["PINECONE_ENV"]
-)
 
-embedding_index: pinecone.Index = pinecone.Index(pinecone.list_indexes()[0])
+def init_pinecone() -> Optional[pinecone.Index]:
+    if os.getenv("ENVIRONMENT") == "TEST":
+        return None  # Bypass in test environment
+
+    load_dotenv()
+    pinecone.init(
+        api_key=os.environ["PINECONE_KEY"], environment=os.environ["PINECONE_ENV"]
+    )
+    return pinecone.Index(pinecone.list_indexes()[0])
+
+
+# Use init_pinecone only when necessary and not in a test environment
+if os.getenv("ENVIRONMENT") != "TEST":
+    embedding_index = init_pinecone()
 
 
 def batch_upload_vectors(
@@ -77,7 +87,3 @@ def query(
 def delete(index_name: str) -> None:
     """Deletes the Pinecone index."""
     pinecone.delete_index(name=index_name)
-
-
-if __name__ == "__main__":
-    pass
