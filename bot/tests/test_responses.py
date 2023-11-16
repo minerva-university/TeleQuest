@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import AsyncMock, patch
 from telegram import Update, Message, Chat
-from responses import start, help
 from typing import Dict
 from datetime import datetime
+from bot.responses import start, help
 
 
 class TestResponses(unittest.TestCase):

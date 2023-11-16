@@ -1,5 +1,6 @@
 import unittest
-from db_types import (
+
+from db.db_types import (
     GroupChat,
     PCEmbeddingMetadata,
     PCEmbeddingData,
@@ -7,16 +8,18 @@ from db_types import (
     PCQueryResults,
     AddMessageResult,
 )
+from pymongo.collection import Collection
+from typing import cast
 
 
 class TestDbTypes(unittest.TestCase):
     def test_group_chat_type(self) -> None:
-        # Create a mock GroupChat instance
+        # Create a mock GroupChat instance without including the optional 'messages' field
         group_chat: GroupChat = GroupChat(
             chat_id=12345,
             group_name="Test Group",
-            categories=["category1", "category2"],
-            messages=None,  # Assuming Collection[TMessage] is a complex type to mock
+            categories=["category1", "category2"]
+            # 'messages' field is omitted
         )
         self.assertIsInstance(group_chat, dict)
 
@@ -27,14 +30,18 @@ class TestDbTypes(unittest.TestCase):
         self.assertIsInstance(pc_embedding_metadata, dict)
 
     def test_pc_embedding_data_type(self) -> None:
+        # Providing valid values for all fields including 'metadata'
+        metadata: PCEmbeddingMetadata = PCEmbeddingMetadata(category="test_category")
         pc_embedding_data: PCEmbeddingData = PCEmbeddingData(
-            id="data1", values=[0.1, 0.2, 0.3], metadata=None
+            id="data1", values=[0.1, 0.2, 0.3], metadata=metadata
         )
         self.assertIsInstance(pc_embedding_data, dict)
 
     def test_pc_query_result_type(self) -> None:
+        # Providing valid values for all fields including 'metadata'
+        metadata: PCEmbeddingMetadata = PCEmbeddingMetadata(category="test_category")
         pc_query_result: PCQueryResult = PCQueryResult(
-            id="result1", score=0.8, values=[0.1, 0.2, 0.3], metadata=None
+            id="result1", score=0.8, values=[0.1, 0.2, 0.3], metadata=metadata
         )
         self.assertIsInstance(pc_query_result, dict)
 

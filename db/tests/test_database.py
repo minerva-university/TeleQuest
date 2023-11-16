@@ -1,8 +1,10 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from telegram import Message
-from database import store_message_to_db, AddMessageResult
 from typing import Any
+
+from db.database import store_message_to_db
+from db.db_types import AddMessageResult
 
 
 class TestStoreMessageToDb(unittest.TestCase):

@@ -1,15 +1,18 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from vectordb import batch_upload_vectors, query, delete, upload_vectors
-from typing import List, Dict, Any
+
+from db.vectordb import batch_upload_vectors, query, delete, upload_vectors
+from db.db_types import PCEmbeddingData, PCEmbeddingMetadata
+from typing import List
 
 
 class TestVectorDB(unittest.TestCase):
     @patch("vectordb.pinecone.Index")
     def test_upload_vectors(self, mock_index: MagicMock) -> None:
         # Arrange
-        mock_embeddings: List[Dict[str, Any]] = [
-            {"id": "1", "values": [0.1, 0.2], "metadata": {}}
+        metadata: PCEmbeddingMetadata = {"category": "test_category"}
+        mock_embeddings: List[PCEmbeddingData] = [
+            PCEmbeddingData(id="1", values=[0.1, 0.2], metadata=metadata)
         ]
         mock_index.upsert = MagicMock()
 
@@ -25,8 +28,9 @@ class TestVectorDB(unittest.TestCase):
         self, mock_upload_vectors: MagicMock, mock_init_pinecone: MagicMock
     ) -> None:
         # Arrange
-        mock_embeddings: List[Dict[str, Any]] = [
-            {"id": "1", "values": [0.1, 0.2], "metadata": {}}
+        metadata: PCEmbeddingMetadata = {"category": "test_category"}
+        mock_embeddings: List[PCEmbeddingData] = [
+            PCEmbeddingData(id="1", values=[0.1, 0.2], metadata=metadata)
         ] * 250
         mock_index = MagicMock()
 
