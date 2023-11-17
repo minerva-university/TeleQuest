@@ -3,6 +3,8 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+from ai.constants import GPT_INFO
+
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
 
@@ -67,7 +69,7 @@ def create_chat_completion(
         messages=messages,
         temperature=temperature,
         **kwargs,
-    )  # type: ignore
+    )
     return cast(ChatCompletion, chat_comp)
 
 
@@ -81,17 +83,10 @@ def ask(
     """Answers a query using GPT and a
     dataframe of relevant texts and embeddings."""
     message = query_message(query, messages, model=model, token_budget=token_budget)
+    gpt_info = GPT_INFO
+    gpt_info[1]["content"] = message
     if print_message:
         print(message)
-    gpt_info = [
-        {
-            "role": "system",
-            "content": "You have access to messages sent from people who \
-are members of a Telegram group chat and can answer questions you have seen \
-answered previously. Your answers are meant to be concise, but contain all relevant information.",
-        },
-        {"role": "user", "content": message},
-    ]
     try:
         resp = openai.ChatCompletion.create(  # type: ignore
             model=model,

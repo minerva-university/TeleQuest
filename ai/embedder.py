@@ -49,4 +49,4 @@ def embed(messages: list[str]) -> list[list[float]]:
 
 
 if __name__ == "__main__":
-    print(embed(["Hello World!"]))
+    pass
