@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
-from ai.constants import GPT_INFO
+from ai.constants import GPT_INFO, INTRODUCTION
 
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
@@ -43,11 +43,7 @@ def query_message(
     token_budget: int = 4096 - 500,
 ) -> str:
     """Return a message for GPT."""
-    introduction = 'The below messages are from individual members of a \
-Telegram group chat. Use them to answer the subsequent question. Keep the answer fairly short \
-and straightforward.\
-If the answer cannot be found in the messages, write "I could not \
-find an answer."'
+    introduction = INTRODUCTION
     question = f"\n\nQuestion: {query}"
     message = introduction
     for string in messages:

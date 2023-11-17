@@ -10,3 +10,9 @@ Your answers are meant to be concise, but contain all relevant information.",
     },
     {"role": "user"},
 ]
+
+INTRODUCTION = 'The below messages are from individual members of a \
+Telegram group chat. Use them to answer the subsequent question. Keep the answer fairly short \
+and straightforward.\
+If the answer cannot be found in the messages, write "I could not \
+find an answer."'
