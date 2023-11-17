@@ -4,17 +4,20 @@ from pathlib import Path
 
 import certifi
 import pymongo
-from typing import List
+from typing import List, Any, Dict
 from dotenv import load_dotenv
+from pymongo.collection import Collection
+from pymongo.command_cursor import CommandCursor
 
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
 from db.db_types import AddMessageResult, GroupChat, SerializedMessage
+from bot.telegram_types import TMessage
 
 load_dotenv()
 
 # Connect to the MongoDB Database
-client: pymongo.MongoClient[GroupChat] = pymongo.MongoClient(
+client: pymongo.MongoClient[Any] = pymongo.MongoClient(
     os.getenv("MONGO_URI"), tlsCAFile=certifi.where()
 )
 db = client[os.getenv("DB_NAME", "")]
@@ -103,3 +106,34 @@ def store_multiple_messages_to_db(
     )
 
     return AddMessageResult.SUCCESS
+
+
+def get_multiple_messages_by_id(chat_id: int, message_ids: List[str]) -> List[TMessage]:
+    """
+    Retrieves a list of messages from the database based on chat_id and message_ids.
+
+    Parameters:
+    chat_id: int
+        The chat id of the group chat
+    message_ids: List[int]
+        The list of message IDs to retrieve
+
+    Returns:
+    List[SerializedMessage]
+        The list of messages that match the given message IDs in the specified chat
+    """
+
+    pipeline: List[Dict[str, Any]] = [
+        {"$match": {"chat_id": chat_id}},
+        {"$project": {"messages": {"$objectToArray": "$messages"}}},
+        {"$unwind": "$messages"},
+        {"$match": {"messages.k": {"$in": message_ids}}},
+        {"$project": {"message": "$messages.v"}},
+    ]
+
+    # Execute the aggregation pipeline
+    chat_group: CommandCursor[Dict[str, Any]] = db.active_groups.aggregate(pipeline)
+
+    result: list[TMessage] = [msg["message"] for msg in chat_group]
+
+    return result

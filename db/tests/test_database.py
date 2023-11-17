@@ -106,7 +106,3 @@ class TestStoreMessagesToDB(unittest.TestCase):
 
         result = store_multiple_messages_to_db(self.chat_id, self.serialized_messages)
         self.assertEqual(result, AddMessageResult.SUCCESS)
-
-
-if __name__ == "__main__":
-    unittest.main()
