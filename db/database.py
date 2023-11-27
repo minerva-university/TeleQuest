@@ -55,7 +55,7 @@ def store_message_to_db(
         add_message_result = db.active_groups.update_one(
             {"chat_id": chat_id},
             {
-                "$set": {f"messages.{msg.get_id()}": msg.get_serialized_without_id()},
+                "$set": {f"messages.{msg.get_id()}": msg.get_as_tmessage()},
             },
         )
         if (
@@ -95,7 +95,7 @@ def store_multiple_messages_to_db(
         )
 
     # Serialize messages without IDs for insertion
-    serialized_messages = [msg.get_serialized_without_id() for msg in messages]
+    serialized_messages = [msg.get_as_tmessage() for msg in messages]
 
     # Insert the messages into the database
     db.active_groups.update_one(
@@ -106,32 +106,6 @@ def store_multiple_messages_to_db(
     )
 
     return AddMessageResult.SUCCESS
-
-
-def read_messages_by_ids(chat_id: int | None, message_ids: list[int]) -> list[TMessage]:
-    """
-    This function reads a list of messages from the database given their ids.
-
-    ----
-    Parameters:
-    chat_id: int
-        The chat id of the group chat
-    message_ids: list[int]
-        The list of message ids to be read from the database
-    """
-
-    # get the group chat object from the database
-    group_chat = db.active_groups.find_one({"chat_id": chat_id})
-    if not group_chat:
-        return []
-
-    # get the messages from the group chat object
-    if "messages" not in group_chat:
-        return []
-    messages = group_chat["messages"]
-
-    # return the messages that have the message ids in the list of message ids
-    return [messages[str(message_id)] for message_id in message_ids]  # type: ignore
 
 
 def get_multiple_messages_by_id(chat_id: int, message_ids: List[str]) -> List[TMessage]:
@@ -163,3 +137,7 @@ def get_multiple_messages_by_id(chat_id: int, message_ids: List[str]) -> List[TM
     result: list[TMessage] = [msg["message"] for msg in chat_group]
 
     return result
+
+
+if __name__ == "__main__":
+    pass

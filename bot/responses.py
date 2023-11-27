@@ -7,7 +7,10 @@ from telegram.ext import ContextTypes
 
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
 sys.path.append(BASE_DIR)
-from db.database import store_message_to_db, read_messages_by_ids
+from db.database import (
+    get_multiple_messages_by_id,
+    store_message_to_db,
+)
 from db.vectordb import upload_vectors, query
 from db.db_types import AddMessageResult, SerializedMessage
 from ai.embedder import embed
@@ -154,10 +157,9 @@ async def respond_to_question(
     embedding_ = embed([question])
     embedding: list[float] = embedding_[0]
     top_3 = query(chat_id, embedding, top_k=3)["matches"]
-    msg_ids_ = [msg["id"] for msg in top_3]
-    msg_ids_ = [m_id.split(":")[1] for m_id in msg_ids_]
-    msg_ids: list[int] = list(map(int, msg_ids_))
-    messages = read_messages_by_ids(chat_id, msg_ids)
+    msg_ids = [msg["id"] for msg in top_3]
+    msg_ids = [m_id.split(":")[1] for m_id in msg_ids]
+    messages = get_multiple_messages_by_id(chat_id, msg_ids)
     message_texts: list[str] = filter(
         lambda t: isinstance(t, str), [msg["text"] for msg in messages]
     )  # type: ignore
