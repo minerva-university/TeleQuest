@@ -59,6 +59,24 @@ class SerializedMessage:
     def get_id(self) -> int:
         return self.id
 
+    def __repr__(self) -> str:
+        """Provide a detailed representation for debugging."""
+        return (
+            f"SerializedMessage(id={self.id}, from_user={self.from_user}, "
+            f"date={self.date}, reply_to_message={self.reply_to_message}, "
+            f"text={self.text}, photo={self.photo}, video={self.video}, "
+            f"voice={self.voice}, chat_title={self.chat_title})"
+        )
+
+    def __str__(self) -> str:
+        """Provide a user-friendly string representation of the message."""
+        return (
+            f"Message ID: {self.id}, From: {self.from_user}, Date: {self.date}, "
+            f"Reply To: {self.reply_to_message}, Text: {self.text}, "
+            f"Photo: {self.photo}, Video: {self.video}, Voice: {self.voice}, "
+            f"Chat Title: {self.chat_title}"
+        )
+
 
 PCEmbeddingMetadata = TypedDict(
     "PCEmbeddingMetadata", {"category": NotRequired[str], "chat_id": int}
