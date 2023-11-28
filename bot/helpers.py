@@ -51,4 +51,4 @@ def send_help_response(
     """
     return bot.send_message(
         chat_id=chat_id, text=messages["help"].format(first_name, group_name)
-    )
+    )  # type: ignore

@@ -19,7 +19,8 @@ EmbedResponseData = TypedDict(
         "object": str,
         "data": list[EmbeddingData],
         "model": str,
-        "usage": str,
+        "usage": str
+        | dict[Literal["completion_tokens", "prompt_tokens", "total_tokens"], int],
     },
 )
 

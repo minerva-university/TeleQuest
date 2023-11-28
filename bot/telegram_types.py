@@ -1,4 +1,5 @@
-from typing import Literal, TypedDict
+import datetime
+from typing import Literal, NotRequired, TypedDict
 
 TMessageKey = Literal[
     "id",
@@ -19,16 +20,27 @@ TTextEntity = TypedDict(
     },
 )
 
+TUser = TypedDict(
+    "TUser",
+    {
+        "id": int,
+        "is_bot": bool,
+        "first_name": str,
+        "username": str,
+        "last_name": NotRequired[str],
+        "language_code": str,
+    },
+)
+
 TMessage = TypedDict(
     "TMessage",
     {
-        "id": str,
-        "type": str,
-        "date": str,
-        "from": str,
-        "from_id": str,
-        "reply_to_message_id": str,
-        "text": str | list[TTextEntity],
-        "text_entities": list[TTextEntity],
+        "id": int,
+        "date": datetime.datetime,
+        "from_user": TUser,
+        "reply_to_message": int | None,
+        "text": str | list[TTextEntity] | None,
+        "text_entities": NotRequired[list[TTextEntity]],
+        "chat_title": str | None,
     },
 )

@@ -9,14 +9,14 @@ class TestVectorDB(unittest.TestCase):
     @patch("db.vectordb.pinecone.Index")
     def test_upload_vectors(self, mock_index: MagicMock) -> None:
         # Arrange
-        metadata: PCEmbeddingMetadata = {"category": "test_category"}
+        metadata: PCEmbeddingMetadata = {"category": "test_category", "chat_id": 12345}
         mock_embeddings: list[PCEmbeddingData] = [
             PCEmbeddingData(id="1", values=[0.1, 0.2], metadata=metadata)
         ]
         mock_index.upsert = MagicMock()
 
         # Act
-        upload_vectors(mock_index, mock_embeddings)
+        upload_vectors(mock_embeddings, mock_index)
 
         # Assert
         mock_index.upsert.assert_called_once_with(vectors=mock_embeddings)
@@ -27,7 +27,7 @@ class TestVectorDB(unittest.TestCase):
         self, mock_upload_vectors: MagicMock, mock_init_pinecone: MagicMock
     ) -> None:
         # Arrange
-        metadata: PCEmbeddingMetadata = {"category": "test_category"}
+        metadata: PCEmbeddingMetadata = {"category": "test_category", "chat_id": 12345}
         mock_embeddings: list[PCEmbeddingData] = [
             PCEmbeddingData(id="1", values=[0.1, 0.2], metadata=metadata)
         ] * 250
@@ -47,13 +47,13 @@ class TestVectorDB(unittest.TestCase):
         mock_index.upsert = MagicMock()
 
         # Arrange
-        metadata: PCEmbeddingMetadata = {"category": "test_category"}
+        metadata: PCEmbeddingMetadata = {"category": "test_category", "chat_id": 12345}
         mock_embeddings: list[PCEmbeddingData] = [
             PCEmbeddingData(id="1", values=[0.1, 0.2], metadata=metadata)
         ]
 
         # Act
-        upload_vectors(mock_index, mock_embeddings)
+        upload_vectors(mock_embeddings, mock_index)
 
         # Assert
         mock_index.upsert.assert_called_once_with(vectors=mock_embeddings)

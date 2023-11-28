@@ -23,13 +23,14 @@ def init_pinecone() -> Optional[pinecone.Index]:
     return pinecone.Index(pinecone.list_indexes()[0])
 
 
+embedding_index = None
 # Use init_pinecone only when necessary and not in a test environment
 if os.getenv("ENVIRONMENT") != "TEST":
     embedding_index = init_pinecone()
 
 
 def batch_upload_vectors(
-    index: pinecone.Index, all_embeddings: Sequence[PCEmbeddingData]
+    index: pinecone.Index | None, all_embeddings: Sequence[PCEmbeddingData]
 ) -> None:
     """
     Takes in a very large list of embedding data, breaks this into batches of maximum size 100
@@ -42,6 +43,8 @@ def batch_upload_vectors(
     all_embeddings : Sequence[PCEmbeddingData]
             The list of all message embeddings to upload to the Pinecone index.
     """
+    if index is None:
+        return
 
     # Define the batch size
     BATCH_SIZE = 100
@@ -52,11 +55,12 @@ def batch_upload_vectors(
     # Loop through each batch and upload
     for i in range(num_batches):
         batch = all_embeddings[i * BATCH_SIZE : (i + 1) * BATCH_SIZE]
-        upload_vectors(index, batch)
+        upload_vectors(batch, index)
 
 
 def upload_vectors(
-    index: pinecone.Index, message_embeddings: Sequence[PCEmbeddingData]
+    message_embeddings: Sequence[PCEmbeddingData],
+    index: pinecone.Index | None = embedding_index,
 ) -> None:
     """
     Uploads a list of message embeddings to the Pinecone index.
@@ -73,13 +77,17 @@ def upload_vectors(
 
 
 def query(
-    index: pinecone.Index,
+    chat_id: int,
     query_vector: list[float],
     top_k: int = 5,
-    id: str | None = None,
+    index: pinecone.Index | None = embedding_index,
 ) -> PCQueryResults:
     """Queries the Pinecone index with a query vector."""
-    res = index.query(vector=query_vector, top_k=top_k, id=id)
+    if index is None:
+        return {"matches": [], "namespace": ""}
+    res = index.query(
+        vector=query_vector, top_k=top_k, filter={"chat_id": {"$eq": chat_id}}
+    )
     results = cast(PCQueryResults, res)
     return results
 

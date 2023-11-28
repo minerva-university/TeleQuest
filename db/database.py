@@ -55,7 +55,7 @@ def store_message_to_db(
         add_message_result = db.active_groups.update_one(
             {"chat_id": chat_id},
             {
-                "$set": {f"messages.{msg.get_id()}": msg.get_serialized_without_id()},
+                "$set": {f"messages.{msg.get_id()}": msg.get_as_tmessage()},
             },
         )
         if (
@@ -95,7 +95,7 @@ def store_multiple_messages_to_db(
         )
 
     # Serialize messages without IDs for insertion
-    serialized_messages = [msg.get_serialized_without_id() for msg in messages]
+    serialized_messages = [msg.get_as_tmessage() for msg in messages]
 
     # Insert the messages into the database
     db.active_groups.update_one(
@@ -137,3 +137,7 @@ def get_multiple_messages_by_id(chat_id: int, message_ids: List[str]) -> List[TM
     result: list[TMessage] = [msg["message"] for msg in chat_group]
 
     return result
+
+
+if __name__ == "__main__":
+    pass
