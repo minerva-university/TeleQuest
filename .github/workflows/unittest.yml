@@ -22,6 +22,7 @@ jobs:
         echo "MONGO_URI=mongo_db_key" >> $GITHUB_ENV
         echo "PINECONE_KEY=your_pinecone_key" >> $GITHUB_ENV
         echo "PINECONE_ENV=your_pinecone_env" >> $GITHUB_ENV
+        echo "OPENAI_API_KEY=your_openai_key" >> $GITHUB_ENV
         echo "ENVIRONMENT=TEST" >> $GITHUB_ENV
 
     - name: Install dependencies
@@ -32,5 +33,5 @@ jobs:
 
     - name: Run unittests with coverage
       run: |
-        coverage run -m unittest discover || true
-        coverage report -m || true
+        coverage run -m unittest discover
+        coverage report -m
