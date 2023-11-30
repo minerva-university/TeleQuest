@@ -9,7 +9,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+if os.getenv("ENVIRONMENT") != "TEST":
+    openai.api_key = os.environ["OPENAI_API_KEY"]
 
 
 def embed(messages: list[str]) -> list[list[float]]:
