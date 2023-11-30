@@ -1,10 +1,5 @@
 import os
 import sys
-from pathlib import Path
-
-BASE_DIR = os.path.join(Path(__file__).parent.parent)
-sys.path.append(BASE_DIR)
-
 import telegram
 from bot.responses import start, help, handle_message
 from telegram.ext import ApplicationBuilder, Application
@@ -12,7 +7,9 @@ from telegram.ext import filters
 from telegram.ext import CommandHandler, MessageHandler, ContextTypes
 
 
-def init(deploy: bool = False) -> tuple[Application, MessageHandler[ContextTypes.DEFAULT_TYPE], int, str]:  # type: ignore
+def init(
+    deploy: bool = False,
+) -> tuple[Application, MessageHandler[ContextTypes.DEFAULT_TYPE], int, str]:
     BOT_TOKEN = os.getenv("BOT_TOKEN" if deploy else "LOCAL_BOT_TOKEN", "")
 
     # Start the telegram bot
