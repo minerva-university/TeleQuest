@@ -1,26 +1,8 @@
-import os
-import sys
-from pathlib import Path
-
-import certifi
-import pymongo
+from . import db
 from typing import List, Any, Dict
-from dotenv import load_dotenv
-from pymongo.collection import Collection
 from pymongo.command_cursor import CommandCursor
-
-BASE_DIR = os.path.join(Path(__file__).parent.parent)
-sys.path.append(BASE_DIR)
-from db.db_types import AddMessageResult, GroupChat, SerializedMessage
+from db.db_types import AddMessageResult, SerializedMessage
 from bot.telegram_types import TMessage
-
-load_dotenv()
-
-# Connect to the MongoDB Database
-client: pymongo.MongoClient[Any] = pymongo.MongoClient(
-    os.getenv("MONGO_URI"), tlsCAFile=certifi.where()
-)
-db = client[os.getenv("DB_NAME", "")]
 
 
 def store_message_to_db(
@@ -137,7 +119,3 @@ def get_multiple_messages_by_id(chat_id: int, message_ids: List[str]) -> List[TM
     result: list[TMessage] = [msg["message"] for msg in chat_group]
 
     return result
-
-
-if __name__ == "__main__":
-    pass
