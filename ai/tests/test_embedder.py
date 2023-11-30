@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock
 import openai
 from ai.embedder import embed
 from typing import List
+from ai import EMBEDDING_MODEL
 
 
 class TestEmbedFunction(unittest.TestCase):
@@ -17,6 +18,7 @@ class TestEmbedFunction(unittest.TestCase):
         messages: List[str] = ["hello", "world"]
         result = embed(messages)
         self.assertEqual(result, [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]])
+        mock_openai.assert_called_once_with(model=EMBEDDING_MODEL, input=messages)
 
     def test_empty_strings_in_input(self) -> None:
         messages: List[str] = ["hello", "", "world"]
