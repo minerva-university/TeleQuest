@@ -1,14 +1,11 @@
 import json
-import sys
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
 from pymongo.collection import Collection
-from typing import Any, Dict, NotRequired, Optional, Tuple, TypedDict, Union
+from typing import NotRequired, Optional, Tuple, TypedDict, Union
 
 from telegram import Message, PhotoSize, Video, Voice
 
-sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from bot.telegram_types import TMessage, TUser
 
 GroupChat = TypedDict(
