@@ -1,9 +1,15 @@
+import os
 import time
 import openai
 from openai.error import RateLimitError
 
 from ai.aitypes import EmbedResponseData
 from . import EMBEDDING_MODEL
+from dotenv import load_dotenv
+
+load_dotenv()
+
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 
 def embed(messages: list[str]) -> list[list[float]]:
