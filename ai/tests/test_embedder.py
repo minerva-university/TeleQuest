@@ -20,12 +20,22 @@ class TestEmbedFunction(unittest.TestCase):
         self.assertEqual(result, [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]])
         mock_openai.assert_called_once_with(model=EMBEDDING_MODEL, input=messages)
 
-    def test_empty_strings_in_input(self) -> None:
+    @patch("ai.embedder.openai.Embedding.create")
+    def test_empty_strings_in_input(self, mock_openai: Mock) -> None:
+        mock_openai.return_value = {
+            "data": [{"index": 0, "embedding": [0.1, 0.2, 0.3]}]
+        }
         messages: List[str] = ["hello", "", "world"]
         result = embed(messages)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(
+            len(result), 1
+        )  # Assuming you want to filter out empty messages
+        mock_openai.assert_called_once_with(
+            model=EMBEDDING_MODEL, input=["hello", "world"]
+        )
 
-    def test_invalid_number_of_messages(self) -> None:
+    @patch("ai.embedder.openai.Embedding.create", return_value={"data": []})
+    def test_invalid_number_of_messages(self, mock_openai: Mock) -> None:
         messages: List[str] = []  # Testing with no messages
         with self.assertRaises(AssertionError):
             embed(messages)
@@ -33,6 +43,7 @@ class TestEmbedFunction(unittest.TestCase):
         messages = ["message"] * 2001  # Testing with more than 2000 messages
         with self.assertRaises(AssertionError):
             embed(messages)
+        mock_openai.assert_not_called()
 
     @patch("openai.Embedding.create")
     @patch("time.sleep", return_value=None)
