@@ -1,1 +1,1 @@
-web: python3 bot/main.py -d
+web: python3 app.py -d
