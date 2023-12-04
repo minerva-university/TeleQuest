@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import logging
 import telegram
@@ -12,7 +13,9 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 
 # Start Write-Ahead Logs (For app status and debugging)
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    stream=sys.stdout,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
 
