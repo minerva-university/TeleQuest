@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import logging
 from pathlib import Path
@@ -9,7 +10,9 @@ load_dotenv()
 
 # Start Write-Ahead Logs (For app status and debugging)
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    stream=sys.stdout,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
 
