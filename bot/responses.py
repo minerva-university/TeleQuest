@@ -70,6 +70,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     context: telegram.ext.Context
         The context object that is received from the telegram bot.
     """
+    print("here")
     effective_chat = update.effective_chat
 
     # get the id of the group chat
@@ -77,6 +78,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     # get the message object
     msg = update.message
+    print(msg)
 
     if not (msg and chat_id):
         return
@@ -120,6 +122,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         # TODO: Logic to handle different types of messages
         message: SerializedMessage | None = SerializedMessage(msg) if msg else None
         store_message = message and store_message_to_db(chat_id, message)
+        print(store_message)
         store_message_success = store_message == AddMessageResult.SUCCESS
         if not store_message_success:
             return
