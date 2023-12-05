@@ -13,8 +13,8 @@ services:
     image: telequest:latest
     env_file: 
       - .env
-    working_dir: /app/web
-    command: npx serve -s build -l 3000
+    working_dir: /app/web/build
+    command: python -m http.server 3000
     networks:
       - app-network
     ports:

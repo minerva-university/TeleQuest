@@ -17,6 +17,7 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
   - [Submitting a Pull Request](#submitting-a-pull-request)
   - [Approving a Pull Request](#approving-a-pull-request)
   - [Merging a Pull Request](#merging-a-pull-request)
+  - [Deployment](#deployment)
 
 ## Setting Up Your Development Environment
 
@@ -215,6 +216,29 @@ to update our requirements.
 
 1. Merging should be done to the `dev` branch only. We only merge to the `main` branch when we are ready to deploy a new version of the project.
 2. Only merge pull requests authored by you. Your approver should not merge your pull request.
+
+## Deployment
+
+The `main` branch is automatically deployed to Heroku automatically when a new commit is pushed to it.
+
+You can run the app locally by running:
+```bash
+python3 app.py
+```
+to run the bot and then
+```bash
+cd web
+npm start
+```
+to run the frontend.
+
+Alternatively, you can run the bot and frontend in Docker containers by building the docker image and running it. You can do this by running:
+```bash
+docker build --no-cache -t telequest:latest .
+docker-compose up -d 
+```
+
+This should build and run the docker images for the bot and frontend. You can then access the frontend at `localhost:3000` and the bot cannot be accessed via a web browser, instead verify that it is running by testing on one of your telegram groups.
 
 ---
 
