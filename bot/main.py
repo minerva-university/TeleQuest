@@ -14,7 +14,7 @@ from telegram.ext import CommandHandler, MessageHandler, ContextTypes
 
 def init(
     deploy: bool = False,
-) -> tuple[Application, MessageHandler[ContextTypes.DEFAULT_TYPE], int, str]:
+) -> tuple[Application, MessageHandler[ContextTypes.DEFAULT_TYPE], int, str]:  # type: ignore
     BOT_TOKEN = os.getenv("BOT_TOKEN" if deploy else "LOCAL_BOT_TOKEN", "")
 
     # Start Write-Ahead Logs (For app status and debugging)
