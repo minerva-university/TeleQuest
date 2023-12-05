@@ -11,17 +11,9 @@ WORKDIR /app/web
 RUN npm install
 RUN npm run build
 
-
 # Stage 2: Set up the Python environment
 FROM python:3.11-slim
 WORKDIR /app
-
-# Install Node.js in the Python image
-RUN apt-get update && \
-    apt-get install -y nodejs npm && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 
 # Copy the Python requirements and install them
 COPY mypy-requirements.txt .
