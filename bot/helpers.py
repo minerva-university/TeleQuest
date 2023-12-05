@@ -1,17 +1,10 @@
-import os
 import re
-import json
 from telegram import Bot
 from typing import Any
-from pathlib import Path
+from . import messages
+
 
 BOT_COMMANDS = ["/q", "/help"]
-BASE_DIR = os.path.join(Path(__file__).parent.parent)
-
-# import messages.json
-messages = json.load(
-    open(os.path.join(BASE_DIR, "bot", "messages.json"), encoding="utf-8")
-)
 
 
 def find_bot_command(text: str) -> str:

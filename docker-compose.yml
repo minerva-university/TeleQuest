@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  backend:
+    image: telequest:latest
+    env_file: 
+      - .env
+    command: python app.py
+    networks:
+      - app-network
+
+  frontend:
+    image: telequest:latest
+    env_file: 
+      - .env
+    working_dir: /app/web/build
+    command: python -m http.server 3000
+    networks:
+      - app-network
+    ports:
+      - "3000:3000"
+
+networks:
+  app-network:

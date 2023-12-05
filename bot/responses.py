@@ -1,12 +1,6 @@
-import os
-import sys
-from pathlib import Path
-
 from telegram import Update
 from telegram.ext import ContextTypes
 
-BASE_DIR = os.path.join(Path(__file__).parent.parent)
-sys.path.append(BASE_DIR)
 from db.database import (
     get_multiple_messages_by_id,
     store_message_to_db,
@@ -15,7 +9,8 @@ from db.vectordb import upload_vectors, query
 from db.db_types import AddMessageResult, SerializedMessage
 from ai.embedder import embed
 from ai.get_answers import ask
-from bot.helpers import find_bot_command, send_help_response, messages
+from bot.helpers import find_bot_command, send_help_response
+from . import messages
 
 MIN_QUESTION_LENGTH = 10
 
@@ -152,17 +147,20 @@ async def respond_to_question(
     question: str
         The question to respond to.
     """
-    print(question)
     embedding_ = embed([question])
     embedding: list[float] = embedding_[0]
+
     top_3 = query(chat_id, embedding, top_k=3)["matches"]
+
     msg_ids = [msg["id"] for msg in top_3]
     msg_ids = [m_id.split(":")[1] for m_id in msg_ids]
+
     messages = get_multiple_messages_by_id(chat_id, msg_ids)
     message_texts: list[str] = filter(
         lambda t: isinstance(t, str), [msg["text"] for msg in messages]
     )  # type: ignore
     message_texts = list(message_texts)
+
     resp = ask(question, message_texts, print_message=True)
     if resp:
         await context.bot.send_message(

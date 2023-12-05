@@ -1,22 +1,15 @@
+import os
 import pinecone
 from typing import Sequence, cast, Optional
-from dotenv import load_dotenv
-import os
-import sys
-from pathlib import Path
 from math import ceil
 
-sys.path.append(str(Path(__file__).parent.parent.absolute()))
-from db.db_types import PCEmbeddingData, PCQueryResults
-
-load_dotenv()
+from .db_types import PCEmbeddingData, PCQueryResults
 
 
 def init_pinecone() -> Optional[pinecone.Index]:
     if os.getenv("ENVIRONMENT") == "TEST":
         return None  # Bypass in test environment
 
-    load_dotenv()
     pinecone.init(
         api_key=os.environ["PINECONE_KEY"], environment=os.environ["PINECONE_ENV"]
     )
