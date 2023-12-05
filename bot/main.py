@@ -1,7 +1,4 @@
 import os
-import sys
-import telegram
-import logging
 from bot.responses import start, help, handle_message
 from telegram.ext import ApplicationBuilder, Application
 from telegram.ext import filters
@@ -12,16 +9,6 @@ def init(
     deploy: bool = False,
 ) -> tuple[Application, MessageHandler[ContextTypes.DEFAULT_TYPE], int, str]:  # type: ignore
     BOT_TOKEN = os.getenv("BOT_TOKEN" if deploy else "LOCAL_BOT_TOKEN", "")
-
-    # Start Write-Ahead Logs (For app status and debugging)
-    logging.basicConfig(
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=logging.INFO,
-    )
-    logger = logging.getLogger(__name__)
-
-    # Start the telegram bot
-    bot = telegram.Bot(BOT_TOKEN)
 
     # Initialize Updater and Dispatcher
     PORT = int(os.environ.get("PORT", 5000))
