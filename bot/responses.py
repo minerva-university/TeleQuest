@@ -105,7 +105,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         elif command.startswith("/q"):
             parts = msg.text.split("/q")
             question = max(parts, key=len).strip()
-            print(question)
 
             if len(question) > MIN_QUESTION_LENGTH:
                 await respond_to_question(question, chat_id, msg.message_id, context)
