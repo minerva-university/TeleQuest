@@ -2,14 +2,11 @@ import os
 import sys
 import json
 import logging
-import telegram
 from pathlib import Path
-from telegram.ext import ApplicationBuilder
 from dotenv import load_dotenv
 
 load_dotenv()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 
 # Start Write-Ahead Logs (For app status and debugging)
 logging.basicConfig(
@@ -18,14 +15,6 @@ logging.basicConfig(
     level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
-
-# Start the telegram bot
-bot = telegram.Bot(BOT_TOKEN)
-
-# Initialize Updater and Dispatcher
-PORT = int(os.environ.get("PORT", 5000))
-app = ApplicationBuilder().token(BOT_TOKEN).build()
-
 
 # read messages JSON file
 BASE_DIR = os.path.join(Path(__file__).parent.parent)

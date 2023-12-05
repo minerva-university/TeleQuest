@@ -1,16 +1,34 @@
 import os
+import telegram
 from bot.responses import start, help, handle_message
+from telegram.ext import ApplicationBuilder, Application
 from telegram.ext import filters
 from telegram.ext import CommandHandler, MessageHandler
-from . import app, PORT, BOT_TOKEN
 
 
-# add a message handler
-msg_handler = MessageHandler(filters.ChatType.GROUPS & filters.ALL, handle_message)
+def init(deploy: bool = False) -> tuple[Application, MessageHandler, int, str]:  # type: ignore
+    BOT_TOKEN = os.getenv("BOT_TOKEN" if deploy else "LOCAL_BOT_TOKEN", "")
+
+    # Start the telegram bot
+    bot = telegram.Bot(BOT_TOKEN)
+
+    # Initialize Updater and Dispatcher
+    PORT = int(os.environ.get("PORT", 5000))
+    app = ApplicationBuilder().token(BOT_TOKEN).build()
+
+    # add a message handler
+    msg_handler = MessageHandler(filters.ChatType.GROUPS & filters.ALL, handle_message)
+    return app, msg_handler, PORT, BOT_TOKEN
 
 
 # main app
-def main(deploy: bool = False) -> None:
+def main(
+    app: Application,  # type: ignore
+    msg_handler: MessageHandler,  # type: ignore
+    PORT: int,
+    BOT_TOKEN: str,
+    deploy: bool = False,
+) -> None:
     app.add_handler(CommandHandler("start", start, filters=~filters.ChatType.GROUPS))
     app.add_handler(CommandHandler("help", help, filters=~filters.ChatType.GROUPS))
     app.add_handler(msg_handler)  # add message handler
