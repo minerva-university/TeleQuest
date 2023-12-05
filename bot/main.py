@@ -9,10 +9,10 @@ import telegram
 from bot.responses import start, help, handle_message
 from telegram.ext import ApplicationBuilder, Application
 from telegram.ext import filters
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import CommandHandler, MessageHandler, ContextTypes
 
 
-def init(deploy: bool = False) -> tuple[Application, MessageHandler, int, str]:
+def init(deploy: bool = False) -> tuple[Application, MessageHandler[ContextTypes.DEFAULT_TYPE], int, str]:  # type: ignore
     BOT_TOKEN = os.getenv("BOT_TOKEN" if deploy else "LOCAL_BOT_TOKEN", "")
 
     # Start Write-Ahead Logs (For app status and debugging)
@@ -36,8 +36,8 @@ def init(deploy: bool = False) -> tuple[Application, MessageHandler, int, str]:
 
 # main app
 def main(
-    app: Application,
-    msg_handler: MessageHandler,
+    app: Application,  # type: ignore
+    msg_handler: MessageHandler[ContextTypes.DEFAULT_TYPE],
     PORT: int,
     BOT_TOKEN: str,
     deploy: bool = False,
