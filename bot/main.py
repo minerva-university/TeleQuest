@@ -1,11 +1,7 @@
 import os
 import sys
-from pathlib import Path
-
-BASE_DIR = os.path.join(Path(__file__).parent.parent)
-sys.path.append(BASE_DIR)
-import logging
 import telegram
+import logging
 from bot.responses import start, help, handle_message
 from telegram.ext import ApplicationBuilder, Application
 from telegram.ext import filters
@@ -61,9 +57,3 @@ def main(
         app.run_polling()  # this is used to run the bot locally
 
     app.idle()  # type: ignore
-
-
-if __name__ == "__main__":
-    deploy = "--deploy" in sys.argv or "-d" in sys.argv
-    app, msg_handler, PORT, BOT_TOKEN = init(deploy=deploy)
-    main(app, msg_handler, PORT, BOT_TOKEN, deploy=deploy)
