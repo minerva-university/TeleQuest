@@ -8,7 +8,6 @@ RequestData = TypedDict(
     },
 )
 
-
 EmbeddingData = TypedDict(
     "EmbeddingData", {"object": str, "index": int, "embedding": list[float]}
 )

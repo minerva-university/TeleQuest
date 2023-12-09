@@ -65,7 +65,7 @@ def store_multiple_messages_to_db(
     messages: List[telegram.Message] | None
         The list of message objects that are to be stored
     """
-
+    print(messages[0].chat_title)
     # check if the group chat exists, else create a collection for it.
     if not db.active_groups.find_one({"chat_id": chat_id}):
         db.active_groups.insert_one(

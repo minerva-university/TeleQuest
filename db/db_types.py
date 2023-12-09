@@ -34,7 +34,7 @@ class AddMessageResult(Enum):
 class SerializedMessage:
     @classmethod
     def from_exported_json(
-        cls, json_dict: dict[str, Any], chat_id: int, chat_title: str
+        cls, json_dict: dict[str, Any], chat_id: int, chat_type: str, chat_title: str
     ) -> "SerializedMessage":
         id = json_dict["id"]
         if "from" not in json_dict:
@@ -45,7 +45,7 @@ class SerializedMessage:
         else:
             last_name = None
         from_user = {
-            "id": json_dict["from_id"],
+            "id": int(json_dict["from_id"].removeprefix("user")),
             "is_bot": False,
             "first_name": first_name,
             "language_code": "en",
@@ -54,12 +54,18 @@ class SerializedMessage:
         if last_name:
             from_user["last_name"] = last_name
 
+        text = json_dict["text"]
+        if isinstance(text, list):
+            entities = json_dict["text_entities"]
+            text = "".join([entity["text"] for entity in entities])
+
         return cls(
             Message(
                 id,
                 datetime.fromisoformat(json_dict["date"]),
-                chat=Chat(chat_id, chat_title),
+                chat=Chat(chat_id, chat_type, chat_title),
                 from_user=user,
+                text=text,
             )
         )
 

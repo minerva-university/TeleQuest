@@ -4,9 +4,15 @@ from typing import Sequence
 from db.database import (
     get_multiple_messages_by_id,
     store_message_to_db,
+    store_multiple_messages_to_db,
 )
 from db.vectordb import upload_vectors, query, batch_upload_vectors
-from db.db_types import AddMessageResult, SerializedMessage, PCEmbeddingData
+from db.db_types import (
+    AddMessageResult,
+    SerializedMessage,
+    PCEmbeddingData,
+    NoFromUserError,
+)
 from ai.embedder import embed, batch_embed_messages
 from ai.get_answers import ask
 from bot.helpers import find_bot_command, send_help_response
@@ -14,7 +20,6 @@ from utils.batch import split_into_batches
 from . import messages
 import io
 import json
-from math import ceil
 
 
 MIN_QUESTION_LENGTH = 10
@@ -197,18 +202,25 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         group_chat = json.loads(f.read())
 
         group_chat_id: int = group_chat["id"]
+        group_chat_type: str = group_chat["type"]
         group_chat_name: str = group_chat["name"]
         messages = group_chat["messages"]
-        messages: Sequence[SerializedMessage] = list(
-            map(
-                SerializedMessage.from_exported_json,
-                messages,
-                [group_chat_id] * len(messages),
-                [group_chat_name] * len(messages),
-            )
+        serial_messages: Sequence[SerializedMessage] = []
+
+        for msg in messages:
+            try:
+                serial_messages.append(
+                    SerializedMessage.from_exported_json(
+                        msg, group_chat_id, group_chat_type, group_chat_name
+                    )
+                )
+            except NoFromUserError:
+                pass
+        serial_messages = list(
+            filter(lambda msg: msg.text not in [None, ""], serial_messages)
         )
-        message_batches_from_embedding = split_into_batches(messages, 2000)
-        texts = [message.text for message in messages]
+        message_batches_from_embedding = split_into_batches(serial_messages, 2000)
+        texts: list[str] = [message.text for message in serial_messages]  # type: ignore
         batch_index = 0
         for embedding_batch in batch_embed_messages(texts):
             embedding_data: list[PCEmbeddingData] = [
@@ -223,5 +235,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             ]
             batch_upload_vectors(embedding_data)
             batch_index += 1
-
+        store_multiple_messages_to_db(group_chat_id, serial_messages)
+        print(batch_index)
         print("Uploaded history.")
