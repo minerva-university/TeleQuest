@@ -205,7 +205,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         group_chat_type: str = group_chat["type"]
         group_chat_name: str = group_chat["name"]
         messages = group_chat["messages"]
-        serial_messages: Sequence[SerializedMessage] = []
+        serial_messages: list[SerializedMessage] = []
 
         for msg in messages:
             try:
