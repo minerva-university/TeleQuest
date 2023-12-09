@@ -1,16 +1,21 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-
+from typing import Sequence
 from db.database import (
     get_multiple_messages_by_id,
     store_message_to_db,
 )
-from db.vectordb import upload_vectors, query
-from db.db_types import AddMessageResult, SerializedMessage
-from ai.embedder import embed
+from db.vectordb import upload_vectors, query, batch_upload_vectors
+from db.db_types import AddMessageResult, SerializedMessage, PCEmbeddingData
+from ai.embedder import embed, batch_embed_messages
 from ai.get_answers import ask
 from bot.helpers import find_bot_command, send_help_response
+from utils.batch import split_into_batches
 from . import messages
+import io
+import json
+from math import ceil
+
 
 MIN_QUESTION_LENGTH = 10
 
@@ -166,3 +171,57 @@ async def respond_to_question(
         await context.bot.send_message(
             chat_id=chat_id, text=resp, reply_to_message_id=message_id
         )
+
+
+async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Receive a chat history as a json file and save it.
+    """
+
+    # get the user's chat id and first name
+    effective_chat = update.effective_chat
+    chat_id = effective_chat and effective_chat.id
+    first_name = effective_chat and effective_chat.first_name
+    print("here")
+    if update.message is None:
+        return
+    if update.message.document is None:
+        return
+    if chat_id:
+        # writing to a custom file
+        f = io.BytesIO()
+        file = await context.bot.get_file(update.message.document)
+        # await file.download_to_drive("json_file.json")
+        await file.download_to_memory(f)
+        f.seek(0)
+        group_chat = json.loads(f.read())
+
+        group_chat_id: int = group_chat["id"]
+        group_chat_name: str = group_chat["name"]
+        messages = group_chat["messages"]
+        messages: Sequence[SerializedMessage] = list(
+            map(
+                SerializedMessage.from_exported_json,
+                messages,
+                [group_chat_id] * len(messages),
+                [group_chat_name] * len(messages),
+            )
+        )
+        message_batches_from_embedding = split_into_batches(messages, 2000)
+        texts = [message.text for message in messages]
+        batch_index = 0
+        for embedding_batch in batch_embed_messages(texts):
+            embedding_data: list[PCEmbeddingData] = [
+                {
+                    "id": f"{group_chat_id}:{message.id}",
+                    "values": embedding,
+                    "metadata": {"chat_id": group_chat_id},
+                }
+                for message, embedding in zip(
+                    message_batches_from_embedding[batch_index], embedding_batch
+                )
+            ]
+            batch_upload_vectors(embedding_data)
+            batch_index += 1
+
+        print("Uploaded history.")

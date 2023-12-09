@@ -23,7 +23,8 @@ if os.getenv("ENVIRONMENT") != "TEST":
 
 
 def batch_upload_vectors(
-    index: pinecone.Index | None, all_embeddings: Sequence[PCEmbeddingData]
+    all_embeddings: Sequence[PCEmbeddingData],
+    index: pinecone.Index | None = embedding_index,
 ) -> None:
     """
     Takes in a very large list of embedding data, breaks this into batches of maximum size 100
@@ -31,10 +32,10 @@ def batch_upload_vectors(
 
     Parameters
     ----------
-    index : pinecone.Index
-            The Pinecone index to upload the vectors to.
     all_embeddings : Sequence[PCEmbeddingData]
             The list of all message embeddings to upload to the Pinecone index.
+    index : pinecone.Index
+            The Pinecone index to upload the vectors to.
     """
     if index is None:
         return

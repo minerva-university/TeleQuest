@@ -7,7 +7,7 @@ from ai.aitypes import (
 import openai  # for calling the OpenAI API
 import tiktoken  # for counting tokens
 
-from utils import timeout, TimeoutError
+from utils.timeout import timeout, TimeoutError
 from . import GPT_MODEL
 
 
