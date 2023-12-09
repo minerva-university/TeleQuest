@@ -17,7 +17,7 @@ from ai.embedder import embed, batch_embed_messages
 from ai.get_answers import ask
 from bot.helpers import find_bot_command, send_help_response
 from utils.batch import split_into_batches
-from . import messages
+from . import messages as bot_messages
 import io
 import json
 
@@ -43,7 +43,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if chat_id:
         await context.bot.send_message(
-            chat_id=chat_id, text=messages["start_user"].format(first_name)
+            chat_id=chat_id, text=bot_messages["start_user"].format(first_name)
         )
 
 
@@ -65,7 +65,7 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if chat_id:
         await context.bot.send_message(
-            chat_id=chat_id, text=messages["help"].format(first_name, "")
+            chat_id=chat_id, text=bot_messages["help"].format(first_name, "")
         )
 
 
@@ -122,7 +122,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         else:
             _ = chat_id and await context.bot.send_message(
                 chat_id=chat_id,
-                text=messages["no_tagged_question"],
+                text=bot_messages["no_tagged_question"],
             )
 
     else:
@@ -186,8 +186,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # get the user's chat id and first name
     effective_chat = update.effective_chat
     chat_id = effective_chat and effective_chat.id
-    first_name = effective_chat and effective_chat.first_name
-    print("here")
     if update.message is None:
         return
     if update.message.document is None:
@@ -196,15 +194,43 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         # writing to a custom file
         f = io.BytesIO()
         file = await context.bot.get_file(update.message.document)
-        # await file.download_to_drive("json_file.json")
-        await file.download_to_memory(f)
-        f.seek(0)
-        group_chat = json.loads(f.read())
+        print(file.file_size)
+        if not file.file_size:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["history_empty"],
+            )
+            return
 
-        group_chat_id: int = group_chat["id"]
-        group_chat_type: str = group_chat["type"]
-        group_chat_name: str = group_chat["name"]
-        messages = group_chat["messages"]
+        # check if the file is bigger than 15MB
+        if file.file_size > 1024 * 1024 * 15:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["history_too_big"],
+            )
+            return
+        await file.download_to_memory(f)
+        f.seek(0)  # start of the file
+        try:
+            group_chat = json.load(f)
+        except json.JSONDecodeError:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["history_invalid"],
+            )
+            return
+
+        try:
+            group_chat_id: int = group_chat["id"]
+            group_chat_type: str = group_chat["type"]
+            group_chat_name: str = group_chat["name"]
+            messages = group_chat["messages"]
+        except KeyError:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["history_invalid"],
+            )
+            return
         serial_messages: list[SerializedMessage] = []
 
         for msg in messages:
@@ -236,5 +262,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             batch_upload_vectors(embedding_data)
             batch_index += 1
         store_multiple_messages_to_db(group_chat_id, serial_messages)
-        print(batch_index)
-        print("Uploaded history.")
+        await context.bot.send_message(
+            chat_id=chat_id,
+            text=bot_messages["history_upload_success"].format(
+                serial_messages[0].chat_title or "the group"
+            ),
+        )
