@@ -42,7 +42,9 @@ class TestResponses(unittest.IsolatedAsyncioTestCase):
         await start(self.update, self.context)
 
         self.context.bot.send_message.assert_awaited_once_with(
-            chat_id=12345, text="Welcome, TestUser!"
+            chat_id=12345,
+            text="Welcome, TestUser!",
+            parse_mode="markdown",
         )
 
     @patch("bot.responses.store_message_to_db")
@@ -62,7 +64,9 @@ class TestResponses(unittest.IsolatedAsyncioTestCase):
         await help(self.update, self.context)
 
         self.context.bot.send_message.assert_awaited_once_with(
-            chat_id=12345, text="Help message for TestUser, "
+            chat_id=12345,
+            text="Help message for TestUser, ",
+            parse_mode="markdown",
         )
 
 
