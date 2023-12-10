@@ -1,7 +1,7 @@
 import re
 from telegram import Bot
 from typing import Any
-from . import messages
+from .messages import messages
 
 
 BOT_COMMANDS = ["/q", "/help"]

@@ -1,6 +1,5 @@
 import os
 import sys
-import json
 import logging
 from pathlib import Path
 from dotenv import load_dotenv
@@ -19,6 +18,3 @@ logger = logging.getLogger(__name__)
 
 # read messages JSON file
 BASE_DIR = os.path.join(Path(__file__).parent.parent)
-messages = json.load(
-    open(os.path.join(BASE_DIR, "bot", "messages.json"), encoding="utf-8")
-)
