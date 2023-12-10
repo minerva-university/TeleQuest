@@ -135,9 +135,9 @@ class TestHistory(unittest.IsolatedAsyncioTestCase):
     @patch("bot.responses.batch_upload_vectors")
     async def test_history(
         self,
-        mock_batch_upload_vectors,
-        mock_store_multiple_messages_to_db,
-        mock_batch_embed_messages,
+        mock_batch_upload_vectors: MagicMock,
+        mock_store_multiple_messages_to_db: MagicMock,
+        mock_batch_embed_messages: MagicMock,
     ) -> None:
         mock_batch_embed_messages.return_value = [
             [
