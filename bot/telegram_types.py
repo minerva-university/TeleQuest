@@ -26,7 +26,7 @@ TUser = TypedDict(
         "id": int,
         "is_bot": bool,
         "first_name": str,
-        "username": str,
+        "username": NotRequired[str],
         "last_name": NotRequired[str],
         "language_code": str,
     },

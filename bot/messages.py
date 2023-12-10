@@ -47,4 +47,8 @@ Now you are ready to get started! 🎉
 
 PS: I'm not single so if you DM me I won't reply. I only reply to messages on the group 😊
     """,
+    "history_too_big": "The uploaded file is too big. Please upload a file less than 15MB.",
+    "history_invalid": "The uploaded file is invalid. Please upload a valid file.",
+    "history_empty": "The uploaded file is empty. Please upload a valid file.",
+    "history_upload_success": "Your history has been uploaded successfully. I will now be able to answer questions from {}'s history.",
 }

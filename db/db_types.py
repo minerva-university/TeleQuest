@@ -2,9 +2,8 @@ import json
 from datetime import datetime
 from enum import Enum
 from pymongo.collection import Collection
-from typing import NotRequired, Optional, Tuple, TypedDict, Union
-
-from telegram import Message, PhotoSize, Video, Voice
+from typing import NotRequired, Optional, Tuple, TypedDict, Union, Any
+from telegram import Message, PhotoSize, Video, Voice, User, Chat
 
 from bot.telegram_types import TMessage, TUser
 
@@ -19,6 +18,13 @@ GroupChat = TypedDict(
 )
 
 
+class NoFromUserError(Exception):
+    def __init__(
+        self, message: str = "Message must have a from_user attribute"
+    ) -> None:
+        super().__init__(message)
+
+
 class AddMessageResult(Enum):
     SUCCESS = "Success"
     FAILURE = "Failure"
@@ -26,10 +32,47 @@ class AddMessageResult(Enum):
 
 
 class SerializedMessage:
+    @classmethod
+    def from_exported_json(
+        cls, json_dict: dict[str, Any], chat_id: int, chat_type: str, chat_title: str
+    ) -> "SerializedMessage":
+        id = json_dict["id"]
+        if "from" not in json_dict:
+            raise NoFromUserError
+        first_name, *other_names = json_dict["from"].split(" ")
+        if len(other_names) > 0:
+            last_name = other_names[-1]
+        else:
+            last_name = None
+        from_user = {
+            "id": int(json_dict["from_id"].removeprefix("user")),
+            "is_bot": False,
+            "first_name": first_name,
+            "language_code": "en",
+        }
+        user = User(**from_user)
+        if last_name:
+            from_user["last_name"] = last_name
+
+        text = json_dict["text"]
+        if isinstance(text, list):
+            entities = json_dict["text_entities"]
+            text = "".join([entity["text"] for entity in entities])
+
+        return cls(
+            Message(
+                id,
+                datetime.fromisoformat(json_dict["date"]),
+                chat=Chat(chat_id, chat_type, chat_title),
+                from_user=user,
+                text=text,
+            )
+        )
+
     def __init__(self, msg: Message):
         self.id: int = msg.message_id
         if not msg.from_user:
-            raise ValueError("Message must have a from_user attribute")
+            raise NoFromUserError
         self.from_user: TUser = json.loads(msg.from_user.to_json())
         self.date: datetime = msg.date
         self.reply_to_message: Union[int, None] = (

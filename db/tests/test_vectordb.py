@@ -38,7 +38,7 @@ class TestVectorDB(unittest.TestCase):
         ] * 250
         mock_index = MagicMock()
 
-        batch_upload_vectors(mock_index, mock_embeddings)
+        batch_upload_vectors(mock_embeddings, mock_index)
         self.assertEqual(mock_upload_vectors.call_count, 3)
         mock_init_pinecone.assert_not_called()
 

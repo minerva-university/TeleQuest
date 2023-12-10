@@ -4,8 +4,10 @@ import openai
 from openai.error import RateLimitError
 
 from ai.aitypes import EmbedResponseData
-from . import EMBEDDING_MODEL
+from ai import EMBEDDING_MODEL, logger
 from dotenv import load_dotenv
+from typing import Generator
+from utils.batch import split_into_batches
 
 load_dotenv()
 
@@ -40,6 +42,28 @@ def embed(messages: list[str]) -> list[list[float]]:
             embedded = True
         except RateLimitError:
             seconds_to_wait *= 1.2
-            print(f"Rate limit error, waiting {seconds_to_wait} seconds...")
+            logger.info(f"Rate limit error, waiting {seconds_to_wait} seconds...")
             time.sleep(seconds_to_wait)
     return [data["embedding"] for data in response["data"]]  # type: ignore
+
+
+def batch_embed_messages(
+    messages: list[str], max_to_embed: int = 20000
+) -> Generator[list[list[float]], None, None]:
+    # this should probably run in a separate thread
+    # and be a generator
+    """
+    This generator embeds the last max_to_embed messages using the openai api.
+    Each batch has a maximum size of 2000 messages/embeddings.
+    ---
+    Parameters
+        messages: list[TMessage]
+                The list of messages to be embedded.
+        max_to_embed: int
+                The maximum number of messages to embed.
+    """
+    messages = messages[-max_to_embed:]
+    BATCH_SIZE = 2000
+    batches = split_into_batches(messages, BATCH_SIZE)
+    for batch in batches:
+        yield embed(batch)

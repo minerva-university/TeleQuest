@@ -1,16 +1,24 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-
 from db.database import (
     get_multiple_messages_by_id,
     store_message_to_db,
+    store_multiple_messages_to_db,
 )
-from db.vectordb import upload_vectors, query
-from db.db_types import AddMessageResult, SerializedMessage
-from ai.embedder import embed
+from db.vectordb import upload_vectors, query, batch_upload_vectors
+from db.db_types import (
+    AddMessageResult,
+    SerializedMessage,
+    PCEmbeddingData,
+    NoFromUserError,
+)
+from ai.embedder import embed, batch_embed_messages
 from ai.get_answers import ask
 from bot.helpers import find_bot_command, send_help_response
-from .messages import messages
+from utils.batch import split_into_batches
+from bot.messages import messages as bot_messages
+import io
+import json
 
 MIN_QUESTION_LENGTH = 10
 
@@ -34,7 +42,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if chat_id:
         await context.bot.send_message(
             chat_id=chat_id,
-            text=messages["start_user"].format(first_name),
+            text=bot_messages["start_user"].format(first_name),
             parse_mode="markdown",
         )
 
@@ -58,7 +66,7 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if chat_id:
         await context.bot.send_message(
             chat_id=chat_id,
-            text=messages["help"].format(first_name, ""),
+            text=bot_messages["help"].format(first_name, ""),
             parse_mode="markdown",
         )
 
@@ -116,7 +124,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         else:
             _ = chat_id and await context.bot.send_message(
                 chat_id=chat_id,
-                text=messages["no_tagged_question"],
+                text=bot_messages["no_tagged_question"],
             )
 
     else:
@@ -169,4 +177,95 @@ async def respond_to_question(
     if resp:
         await context.bot.send_message(
             chat_id=chat_id, text=resp, reply_to_message_id=message_id
+        )
+
+
+async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Receive a chat history as a json file and save it.
+    """
+
+    # get the user's chat id and first name
+    effective_chat = update.effective_chat
+    chat_id = effective_chat and effective_chat.id
+    if update.message is None:
+        return
+    if update.message.document is None:
+        return
+    if chat_id:
+        # writing to a custom file
+        f = io.BytesIO()
+        file = await context.bot.get_file(update.message.document)
+        if not file.file_size:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["history_empty"],
+            )
+            return
+
+        # check if the file is bigger than 15MB
+        if file.file_size > 1024 * 1024 * 15:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["history_too_big"],
+            )
+            return
+        await file.download_to_memory(f)
+        f.seek(0)  # start of the file
+        try:
+            group_chat = json.load(f)
+        except json.JSONDecodeError:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["history_invalid"],
+            )
+            return
+
+        try:
+            group_chat_id: int = group_chat["id"]
+            group_chat_type: str = group_chat["type"]
+            group_chat_name: str = group_chat["name"]
+            messages = group_chat["messages"]
+        except KeyError:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["history_invalid"],
+            )
+            return
+        serial_messages: list[SerializedMessage] = []
+
+        for msg in messages:
+            try:
+                serial_messages.append(
+                    SerializedMessage.from_exported_json(
+                        msg, group_chat_id, group_chat_type, group_chat_name
+                    )
+                )
+            except NoFromUserError:
+                pass
+        serial_messages = list(
+            filter(lambda msg: msg.text not in [None, ""], serial_messages)
+        )
+        message_batches_from_embedding = split_into_batches(serial_messages, 2000)
+        texts: list[str] = [message.text for message in serial_messages]  # type: ignore
+        batch_index = 0
+        for embedding_batch in batch_embed_messages(texts):
+            embedding_data: list[PCEmbeddingData] = [
+                {
+                    "id": f"{group_chat_id}:{message.id}",
+                    "values": embedding,
+                    "metadata": {"chat_id": group_chat_id},
+                }
+                for message, embedding in zip(
+                    message_batches_from_embedding[batch_index], embedding_batch
+                )
+            ]
+            batch_upload_vectors(embedding_data)
+            batch_index += 1
+        store_multiple_messages_to_db(group_chat_id, serial_messages)
+        await context.bot.send_message(
+            chat_id=chat_id,
+            text=bot_messages["history_upload_success"].format(
+                serial_messages[0].chat_title or "the group"
+            ),
         )
