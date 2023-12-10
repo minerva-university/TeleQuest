@@ -10,7 +10,7 @@ from db.db_types import AddMessageResult, SerializedMessage
 from ai.embedder import embed
 from ai.get_answers import ask
 from bot.helpers import find_bot_command, send_help_response
-from . import messages
+from .messages import messages
 
 MIN_QUESTION_LENGTH = 10
 
@@ -33,7 +33,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if chat_id:
         await context.bot.send_message(
-            chat_id=chat_id, text=messages["start_user"].format(first_name)
+            chat_id=chat_id,
+            text=messages["start_user"].format(first_name),
+            parse_mode="markdown",
         )
 
 
@@ -55,7 +57,9 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if chat_id:
         await context.bot.send_message(
-            chat_id=chat_id, text=messages["help"].format(first_name, "")
+            chat_id=chat_id,
+            text=messages["help"].format(first_name, ""),
+            parse_mode="markdown",
         )
 
 

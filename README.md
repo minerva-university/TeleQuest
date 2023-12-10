@@ -6,6 +6,7 @@ TeleQuest aims to provide an intuitive and user-friendly Telegram bot to meet yo
 - [TeleQuest](#telequest)
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
+  - [Technical Design Document](#technical-design-document)
   - [Installation](#installation)
   - [Usage](#usage)
   - [Technologies Used](#technologies-used)
@@ -19,6 +20,7 @@ TeleQuest consists of two main parts:
 
 2. **Website**: A comprehensive website built with React. The website provides in-depth details about the Telegram bot and serves as an introductory platform for new users. Visit our website [here](#link-to-the-website).
 
+## Technical Design Document
 The technical design document can be found [here](https://docs.google.com/document/d/1c7tumNsGgMlP1C7nDkOWpKqCtP4PA8J50vj7RY-cPXo/edit?usp=sharing)
 
 ## Installation
