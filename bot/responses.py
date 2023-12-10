@@ -1,6 +1,5 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from typing import Sequence
 from db.database import (
     get_multiple_messages_by_id,
     store_message_to_db,
@@ -17,10 +16,9 @@ from ai.embedder import embed, batch_embed_messages
 from ai.get_answers import ask
 from bot.helpers import find_bot_command, send_help_response
 from utils.batch import split_into_batches
-from bot import messages as bot_messages
+from bot.messages import messages as bot_messages
 import io
 import json
-
 
 MIN_QUESTION_LENGTH = 10
 
@@ -43,7 +41,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if chat_id:
         await context.bot.send_message(
-            chat_id=chat_id, text=bot_messages["start_user"].format(first_name)
+            chat_id=chat_id,
+            text=bot_messages["start_user"].format(first_name),
+            parse_mode="markdown",
         )
 
 
@@ -65,7 +65,9 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if chat_id:
         await context.bot.send_message(
-            chat_id=chat_id, text=bot_messages["help"].format(first_name, "")
+            chat_id=chat_id,
+            text=bot_messages["help"].format(first_name, ""),
+            parse_mode="markdown",
         )
 
 
