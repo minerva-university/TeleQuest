@@ -5,19 +5,19 @@ from bot.helpers import find_bot_command, send_help_response
 
 
 class TestBotFunctions(unittest.IsolatedAsyncioTestCase):
-    async def test_find_bot_command_with_command(self):
+    async def test_find_bot_command_with_command(self) -> None:
         # Test when a valid command is present
         text_with_command = "Hello! /help@minerva_tele_quest_bot This is a test."
         result = find_bot_command(text_with_command)
         self.assertEqual(result, "/help@minerva_tele_quest_bot")
 
-    async def test_find_bot_command_without_command(self):
+    async def test_find_bot_command_without_command(self) -> None:
         # Test when no command is present
         text_without_command = "Hello! This is a regular message."
         result = find_bot_command(text_without_command)
         self.assertEqual(result, "")
 
-    async def test_send_help_response(self):
+    async def test_send_help_response(self) -> None:
         # Mock the Bot object with AsyncMock
         bot_mock = AsyncMock()
 
