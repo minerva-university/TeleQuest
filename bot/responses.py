@@ -20,7 +20,7 @@ from bot.messages import messages as bot_messages
 import io
 import json
 
-MIN_QUESTION_LENGTH = 10
+MIN_QUESTION_LENGTH = 5
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -116,15 +116,23 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             if len(question) > MIN_QUESTION_LENGTH:
                 await respond_to_question(question, chat_id, msg.message_id, context)
             elif msg.reply_to_message is None or msg.reply_to_message.text is None:
-                return
+                _ = chat_id and await context.bot.send_message(
+                    chat_id=chat_id,
+                    text=bot_messages["no_tagged_question"],
+                )
             else:
                 await respond_to_question(
                     msg.reply_to_message.text, chat_id, msg.message_id, context
                 )
+        elif command.startswith("/start"):
+            _ = chat_id and await context.bot.send_message(
+                chat_id=chat_id,
+                text=bot_messages["start_not_allowed_in_group"],
+            )
         else:
             _ = chat_id and await context.bot.send_message(
                 chat_id=chat_id,
-                text=bot_messages["no_tagged_question"],
+                text=bot_messages["unrecognized_command"],
             )
 
     else:

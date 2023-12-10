@@ -31,7 +31,7 @@ Hello, {} 👋
 I'm TeleQuest, your group chat assistant. I am here to provide quick responses to previously asked questions or conversations in your group chat 🔍
 
 **To start:** 
-🤖 Add me to one of your groups. You need to be an admin to do this.
+🤖 Add me to one of your groups as an admin. You need to be the group owner to do this.
     • Tap "TeleQuest" on the top of your screen.
     • Tap "Add to Group or Channel"
     • Select your group.
@@ -47,6 +47,8 @@ Now you are ready to get started! 🎉
 
 PS: I'm not single so if you DM me I won't reply. I only reply to messages on the group 😊
     """,
+    "start_not_allowed_in_group": "You can only use /start in a private conversation with me and not on a group chat.",
+    "unrecognized_command": "Sorry, I don't recognize that command. Please use /help to see the list of commands I recognize.",
     "history_too_big": "The uploaded file is too big. Please upload a file less than 15MB.",
     "history_invalid": "The uploaded file is invalid. Please upload a valid file.",
     "history_empty": "The uploaded file is empty. Please upload a valid file.",
