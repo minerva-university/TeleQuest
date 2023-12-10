@@ -17,7 +17,7 @@ from ai.embedder import embed, batch_embed_messages
 from ai.get_answers import ask
 from bot.helpers import find_bot_command, send_help_response
 from utils.batch import split_into_batches
-from . import messages as bot_messages
+from bot import messages as bot_messages
 import io
 import json
 
@@ -194,7 +194,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         # writing to a custom file
         f = io.BytesIO()
         file = await context.bot.get_file(update.message.document)
-        print(file.file_size)
         if not file.file_size:
             await context.bot.send_message(
                 chat_id=chat_id,

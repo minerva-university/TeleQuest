@@ -63,6 +63,7 @@ def batch_embed_messages(
         max_to_embed: int
                 The maximum number of messages to embed.
     """
+    print("called")
     messages = messages[-max_to_embed:]
     BATCH_SIZE = 2000
     batches = split_into_batches(messages, BATCH_SIZE)
