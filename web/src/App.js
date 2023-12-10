@@ -3,23 +3,22 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "./App.css";
 import robot from "./robot.svg";
 import AboutPage from "./components/AboutPage";
-
-import JSConfetti from "js-confetti";
-
-const jsConfetti = new JSConfetti();
+import { NavLink } from "react-router-dom";
 
 const App = () => {
-  const triggerConfetti = () => {
-    jsConfetti.addConfetti();
-  };
-
   return (
     <Router>
       <div className="container">
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/contact">Contact</Link>
+        <nav className="buttons-container">
+          <NavLink to="/" className="buttons" activeClassName="active">
+            Home
+          </NavLink>
+          <NavLink to="/about" className="buttons" activeClassName="active">
+            About
+          </NavLink>
+          <NavLink to="/contact" className="buttons" activeClassName="active">
+            Contact
+          </NavLink>
         </nav>
 
         <Routes>
@@ -29,30 +28,23 @@ const App = () => {
               <main>
                 <header>
                   <section className="main-content">
-                    <h1>TeleQuest</h1>
-                    <div id="tagline">
-                      <h3>A unique answer</h3>
-                      <h3>to the same questions.</h3>
+                    <h1 className="title">TeleQuest</h1>
+                    <div className="tagline">
+                      <h3 className="pitchLeft">A unique answer</h3>
+                      <h3 className="pitchRight">to the same questions.</h3>
                     </div>
 
-                    <h2>
+                    <h2 className="greatPitch">
                       <br />
                       <br />
                       Great for large Telegram** groups
                     </h2>
-
-                    <div className="buttons">
+                    <h4 className="button-start">
                       <button>Get Started</button>
-                    </div>
-
-                    <div id="bottom-main">
-                      <p>**Exclusively available through Telegram</p>
-                      <div className="buttons">
-                        <button className="hoverme" onClick={triggerConfetti}>
-                          <span>Click for confetti.</span>
-                        </button>
-                      </div>
-                    </div>
+                    </h4>
+                    <h5 className="exclusiveMessage">
+                      **Exclusively available through Telegram
+                    </h5>
                   </section>
                 </header>
 

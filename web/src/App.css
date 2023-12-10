@@ -14,27 +14,7 @@
   color: #0900af;
 }
 
-h1 {
-  font-size: 5rem;
-  font-weight: 700;
-  margin-bottom: 2%;
-  margin-top: 0;
-}
 
-h2 {
-  font-size: 30;
-  font-weight: 700;
-  margin: 0;
-}
-
-h3{
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-header {
-  text-align: center;
-}
 
 nav {
   display: flex;
@@ -47,36 +27,16 @@ nav {
 main{
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin: 5%;
-}
-
-section{
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  align-items:start;
-}
-
-.buttons{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: -webkit-fill-available;
-}
-
-section h2{
-  margin-top: 10%;
-  margin-bottom: 5%;
 }
 
 #bottom-main{
   margin-top: 20%;
   width: -webkit-fill-available;
 }
-#tagline{
-  /* margin-top: 20%; */
-  width: -webkit-fill-available;
+
+h2 {
+  max-width: 100%;
 }
 
 button {
@@ -94,68 +54,113 @@ button:hover {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Slight increase in shadow on hover */
 }
 
-.main-content {
-  text-align: center;
-}
 
-.illustration, .mobile-illustratiosn {
+.illustration, .mobile-illustrations {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-@keyframes bang {
-  from {
-    transform: translate3d(0,0,0);
-    opacity: 1;
-  }
-}
 
-.button-53 {
-  background-color: #3dd1e7;
-  border: 0 solid #e5e7eb;
-  box-sizing: border-box;
-  color: #000000;
+.buttons-container {
+  position: fixed;
+  top: 0;
+  right: 0;
   display: flex;
-  font-family: ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 1rem;
-  font-weight: 700;
+  gap: 30px; 
+  margin-top: 15px; /* Adjust the gap between buttons */
+}
+
+.buttons {
+  display: flex;
   justify-content: center;
-  line-height: 1.75rem;
-  padding: 0.75rem 1.65rem;
-  position: relative;
-  text-align: center;
-  text-decoration: none #000000 solid;
-  text-decoration-thickness: auto;
-  width: 100%;
-  max-width: 460px;
-  position: relative;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  font-size: 14px;
+  color: #000; /* Adjust the font size as needed */
+  white-space: nowrap;
+  padding: 10px 20px;
+}
+
+
+.buttons:active,
+.buttons.active {
+  background-color: #5c7cfb00;
+  border: 2.5px solid #0900af;
+  border-radius: 20rem;
+  padding: 10px 20px;
   cursor: pointer;
-  transform: rotate(-2deg);
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.button-53:focus {
-  outline: 0;
-}
-
-.button-53:after {
-  content: "";
-  position: absolute;
-  border: 1px solid #000000;
-  bottom: 4px;
-  left: 4px;
-  width: calc(100% - 1px);
-  height: calc(100% - 1px);
-}
-
-.button-53:hover:after {
-  bottom: 2px;
-  left: 2px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  color: #000; /* Adjust the text color for active state */
 }
 
 
+.tagline {
+  margin-top: 1px;
+  display: flex;
+  align-items: flex-start; 
+  flex-direction: column;
+}
 
+.title {
+  font-size: 7rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+
+}
+
+.exclusiveMessage {
+  text-align: center;
+  font-weight: normal;
+}
+
+.greatPitch {
+  text-align: center;
+  font-weight: normal;
+  font-size: 28px;
+  width: 100%; /* Ensure full width for centering */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+  margin: 0 auto; /* Center the element by setting left and right margins to auto */
+}
+
+.pitchLeft,
+.pitchRight {
+  text-align: center;
+  font-weight: normal;
+  font-size: 28px;
+  width: 100%; /* Ensure full width for centering */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+  margin: 0 auto; /* Center the element by setting left and right margins to auto */
+}
+
+.pitchRight {
+  margin-left: 30px;
+}
+
+.pitchLeft {
+  margin-left: -70px;
+}
+
+.greatPitch {
+  margin-top: 100px;
+}
+.button-start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.about-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 100px;
+}
+
+.about-text {
+  margin-right: 100px;
+  margin-left: 700px;
+}
