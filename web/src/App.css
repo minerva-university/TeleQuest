@@ -8,12 +8,9 @@
 .container {
   font-family: 'Arial', sans-serif;
   background-image: linear-gradient(#cae9fd  , #fce2fc );
-  width: 100vw;
-  height: 100vh;
   padding: 20px;
   color: #0900af;
 }
-
 
 
 nav {
@@ -23,6 +20,7 @@ nav {
   margin-bottom: 20px;
   margin-right: 3%;
 }
+
 
 main{
   display: flex;
@@ -47,6 +45,9 @@ button {
   cursor: pointer;
   transition: all 0.3s ease; /* Smoothens the hover effect */
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  color: #f7f6ff;
+  font-weight: 700;
+  font-size: 15px;
 }
 
 button:hover {
@@ -81,6 +82,7 @@ button:hover {
   color: #000; /* Adjust the font size as needed */
   white-space: nowrap;
   padding: 10px 20px;
+  color: #0900af;
 }
 
 
@@ -92,7 +94,13 @@ button:hover {
   padding: 10px 20px;
   cursor: pointer;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  color: #000; /* Adjust the text color for active state */
+  background-color:azure;
+}
+
+.buttons:not(.active) {
+  /* Styles for inactive buttons, e.g., no border */
+  border: none;
+  background-color:azure;
 }
 
 
@@ -143,24 +151,60 @@ button:hover {
 }
 
 .greatPitch {
-  margin-top: 100px;
+  margin-top: 80px;
+  font-weight: 700;
 }
 .button-start {
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
+.filled {
+  background-color:#0900af;
+}
+.faq-question {
+  width: 500px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  background-color:#0900af;
+}
+.faq-container {
+  margin-bottom: 100px;
+}
+.faq-title {
+  margin-top: 150px;
 }
 
 .about-container {
   display: flex;
   justify-content: center;
-  align-items: center;
   flex-direction: column;
   margin-top: 100px;
+  align-items: center;
 }
 
 .about-text {
   margin-right: 100px;
   margin-left: 700px;
+  font-size: 25px;
+
 }
+.question {
+  margin-top: 100px;
+  align-self: flex-start;
+  font-size: 25px;
+  margin-left: 60px;
+}
+.about-text2 {
+  
+  margin-left: 60px;
+  margin-right: 700px;
+  font-size: 25px;
+
+}
+
+.body {
+  overflow: hidden;
+}
+
