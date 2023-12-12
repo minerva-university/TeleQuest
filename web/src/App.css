@@ -4,9 +4,12 @@
     font-size: 1.25rem;
   }
 }
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
 
 .container {
-  font-family: 'Arial', sans-serif;
+  /* font-family: 'Arial', sans-serif; */
+  font-family: 'Montserrat', sans-serif;
   background-image: linear-gradient(#cae9fd  , #fce2fc );
   padding: 20px;
   color: #0900af;
@@ -176,25 +179,12 @@ button:hover {
   margin-top: 150px;
 }
 
-.about-container {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 100px;
-  align-items: center;
-}
-
+/* About Page Styling */
 .about-text {
   margin-right: 100px;
-  margin-left: 700px;
+  /* margin-left: 700px; */
   font-size: 25px;
 
-}
-.question {
-  margin-top: 100px;
-  align-self: flex-start;
-  font-size: 25px;
-  margin-left: 60px;
 }
 .about-text2 {
   
@@ -203,8 +193,167 @@ button:hover {
   font-size: 25px;
 
 }
+.about-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* This centers the items vertically */
+  margin-top: 100px;
+}
 
+.about-image-container {
+  /* Adjust sizing and margins as necessary */
+  margin-right: 20px; /* Space between image and text */
+}
+
+.about-image-container img {
+  width: 100%; /* Adjust as needed */
+  height: auto;
+}
+
+.about-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* This centers the text vertically */
+  /* Other styling as needed */
+}
+
+/* Video Walkthrough Styling */
+.video-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px; /* Adjust overall container margin as needed */
+}
+
+.video-heading {
+  align-self: flex-start;
+  margin-bottom: 20px; /* Adjusts spacing between heading and video */
+}
+
+.video-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px; /* Padding around the video */
+}
+
+.video-wrapper iframe {
+  width: 95%; /* Adjust to make the video fill the width of the container */
+  height: auto; /* Height will be auto-adjusted based on the width */
+  aspect-ratio: 16 / 9; /* Maintain video aspect ratio */
+}
+
+/* Infographic Section Styling */
+.infographic-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 20px; /* Adjust as needed */
+}
+
+.infographic_picleft,
+.infographic_picright {
+  display: flex;
+  align-items: center; /* Aligns items vertically */
+  width: 100%; /* Ensures the container takes full width */
+}
+
+.infographic_text,
+.infographic_img {
+  margin-right: 20px; /* Space between image and text */
+  max-width: 50%; /* Maximum width of the image/text container */
+  width: 100%; /* Makes the container responsive */
+}
+
+.infographic_img img {
+  width: 100%; /* Image takes full width of its container */
+  height: auto; /* Maintains the aspect ratio */
+}
+
+.infographic-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers the text vertically */
+  align-items: center; /* Centers the text horizontally */
+  max-width: 50%; /* Ensures text container doesn't exceed half the page width */
+  width: 100%;
+}
+
+.infographic-step-heading{
+  max-width: 50%; /* Maximum width of the actual text content */
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.infographic-step-description {
+  max-width: 50%; /* Maximum width of the actual text content */
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* FAQ Section Styling */
+
+.faq-section {
+  text-align: center; /* Centers everything in the FAQ section */
+}
+
+.faq-title {
+  /* Additional styling for the title */
+  margin-bottom: 20px; /* Spacing below the title */
+}
+
+
+.faq-item {
+  /* Styling for each FAQ item, adjust as needed */
+  margin-bottom: 10px; /* Spacing between each FAQ item */
+}
+
+.faq-question {
+  background-color: transparent; /* Removes the background */
+  border: 2px solid #0900af; 
+  color: inherit; /* Keeps the text color consistent with the parent */
+  padding: 10px 20px; /* Adjust padding as needed */
+  cursor: pointer; /* Changes the cursor to indicate it's clickable */
+  text-align: left; /* Aligns the text to the left */
+  width: 100%; /* Makes the button full width */
+  transition: background-color 0.3s ease; /* Optional: Adds a transition for hover effect */
+}
+
+.faq-question:hover {
+  background-color: #f5f5f5; /* Optional: Change color on hover, adjust as needed */
+}
+
+.faq-answer {
+  /* Styling for the answer text, adjust as needed */
+  margin-top: 5px; /* Spacing above the answer */
+  text-align: left; /* Aligns the answer text to the left */
+}
+
+/* Privacy Statement Styling */
+.privacy-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px; /* Adjust this value based on your design needs */
+  padding: 20px; /* Optional: Adds padding inside the container */
+}
+.privacy-title {
+  /* Additional styling for the title */
+  margin-bottom: 20px;
+  text-align: center; /* Spacing below the title */
+}
 .body {
   overflow: hidden;
+}
+
+/* Contact Section Styling */
+.contact-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px; /* Adjust this value based on your design needs */
+  padding: 20px; /* Optional: Adds padding inside the container */
 }
 
