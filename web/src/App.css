@@ -37,8 +37,11 @@ main{
   display: flex;
   justify-content: space-between;
   margin: 5%;
+  flex-wrap: wrap; /* Allow items to wrap */
+
 
 }
+
 
 #bottom-main{
   margin-top: 20%;
@@ -175,6 +178,33 @@ button, a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+/* Styles for responsiveness */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center-align the children */
+    margin: 3%; /* Reduce margin for smaller screens */
+  }
+
+  .main-content, .illustration {
+    width: 100%; /* Full width for smaller screens */
+    margin-bottom: 20px; /* Add some space between elements */
+  }
+
+  .title {
+    font-size: 5rem; /* Adjust title size for smaller screens */
+    text-align: center; /* Center the title */
+
+  }
+
+  .tagline h3 {
+    font-size: 24px; /* Adjust tagline font size */
+  }
+
+  .greatPitch, .exclusiveMessage {
+    font-size: 20px; /* Adjust font size for smaller screens */
+  }
 }
 
 .filled {
