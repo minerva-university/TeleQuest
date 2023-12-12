@@ -84,11 +84,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     """
     effective_chat = update.effective_chat
 
-    # get the id of the group chat
-    chat_id = effective_chat.id if effective_chat else None
+    # Determine if the message is new or edited
+    msg = update.edited_message if update.edited_message else update.message
 
-    # get the message object
-    msg = update.message
+    chat_id = effective_chat.id if effective_chat else None
 
     if not (msg and chat_id):
         return
@@ -155,7 +154,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                 }
             ]
         )
-
 
 async def respond_to_question(
     question: str, chat_id: int, message_id: int, context: ContextTypes.DEFAULT_TYPE
