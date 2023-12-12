@@ -18,7 +18,6 @@ WORKDIR /app
 # Copy the Python requirements and install them
 COPY mypy-requirements.txt .
 COPY .env .
-COPY utils.py .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r mypy-requirements.txt
 
@@ -26,6 +25,7 @@ RUN pip install --no-cache-dir -r mypy-requirements.txt
 COPY ai ai/
 COPY bot bot/
 COPY db db/
+COPY utils utils/
 
 # Copy the main application file
 COPY app.py .
