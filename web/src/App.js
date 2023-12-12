@@ -11,6 +11,13 @@ import png5 from "./assets/5.png";
 import png6 from "./assets/6.png";
 import png7 from "./assets/7.png";
 import png8 from "./assets/8.png";
+import Josh from "./assets/Josh.jpg";
+import Ife from "./assets/Ife.jpg";
+import Mako from "./assets/Mako.jpg";
+import Maja from "./assets/Maja.jpeg";
+import Andrii from "./assets/Andrii.jpg";
+import Cass from "./assets/Cass.JPG";
+
 const App = () => {
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
@@ -100,7 +107,7 @@ const App = () => {
     {
       question: "How can I integrate TeleQuest into my Telegram group?",
       answer:
-        "To integrate TELEQUEST into your Telegram group, simply add the bot to the group, and it will automatically start processing historical messages and providing enhanced information retrieval capabilities.",
+        "To integrate TeleQuest into your Telegram group, simply add the bot to the group, and it will automatically start processing historical messages and providing enhanced information retrieval capabilities.",
     },
   ];
 
@@ -147,10 +154,16 @@ const App = () => {
                 Great for large Telegram** groups
               </h2>
               <h4 className="button-start">
-                <button className="filled" onClick={scrollToAbout}>
+                <a
+                  href="https://t.me/minerva_tele_quest_bot"
+                  className="filled button"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Get Started
-                </button>
+                </a>
               </h4>
+
               <h5 className="exclusiveMessage">
                 **Exclusively available through Telegram
               </h5>
@@ -206,7 +219,7 @@ const App = () => {
           </div>
           <div className="infographic-text-container">
             <h2 className="infographic-step-heading">
-              TeleQuest joins the group
+              TeleQuest joins the group.
             </h2>
             <p className="infographic-step-description">
               The group chat owner adds the bot, allowing “Admin Rights” in the
@@ -218,7 +231,7 @@ const App = () => {
         <div className="infographic_picright">
           <div className="infographic-text-container">
             <h2 className="infographic-step-heading">
-              TeleQuest reads all the messages
+              TeleQuest reads all the messages.
             </h2>
             <p className="infographic-step-description">
               For the bot to find answers, it learns from the conversations
@@ -240,7 +253,7 @@ const App = () => {
           </div>
           <div className="infographic-text-container">
             <h2 className="infographic-step-heading">
-              Messages are converted to embeddings{" "}
+              Messages are converted to embeddings.{" "}
             </h2>
             <p className="infographic-step-description">
               Think of embeddings like the bot translating your message to a
@@ -411,6 +424,74 @@ const App = () => {
           repository on GitHub. Reach out to us for insights, queries, or just
           to share your thoughts on our journey!
         </p>
+        <p className="contact-description">Meet the team!</p>
+        <div className="contact-section1">
+          <div className="profile-container">
+            <div className="circle-frame">
+              <img src={Josh} alt="Josh" />
+            </div>
+            <p className="name">
+              <b>Joshua Mark</b>
+            </p>
+            <p className="bio">Anime Enjoyer</p>
+            <p className="email">joshua.mark@uni.minerva.edu</p>
+          </div>
+          <div className="profile-container">
+            <div className="circle-frame">
+              <img src={Ife} alt="Ife" />
+            </div>
+            <p className="name">
+              <b>Ifeoluwakolopin Are</b>
+            </p>
+            <p className="bio">john grisham & vibes</p>
+            <p className="email">ife@uni.minerva.edu</p>
+          </div>
+          <div className="profile-container">
+            <div className="circle-frame">
+              <img src={Mako} alt="Mako" />
+            </div>
+            <p className="name">
+              <b>Mako Ohara</b>
+            </p>
+            <p className="bio">vibing with the team 😄</p>
+            <p className="email">mako_ohara@uni.minerva.edu</p>
+          </div>
+        </div>
+        <div className="contact-section2">
+          <div className="profile-container">
+            <div className="circle-frame">
+              <img src={Maja} alt="Maja" />
+            </div>
+            <p className="name">
+              <b>Maja Ostrowska</b>
+            </p>
+            <p className="bio">
+              I got you covered with a Spotify playlist for every possible
+              occasion.
+            </p>
+            <p className="email">majaostrowska@uni.minerva.edu</p>
+          </div>
+          <div className="profile-container">
+            <div className="circle-frame">
+              <img src={Andrii} alt="Andrii" />
+            </div>
+            <p className="name">
+              <b>Andrii Korotun</b>
+            </p>
+            <p className="bio">Origami master</p>
+            <p className="email"> andrii@uni.minerva.edu</p>
+          </div>
+          <div className="profile-container">
+            <div className="circle-frame">
+              <img src={Cass} alt="Cass" />
+            </div>
+            <p className="name">
+              <b>Cassandra Marguerit Cruz</b>
+            </p>
+            <p className="bio">Hardcore Taylor Swift stan</p>
+            <p className="email"> casscruz@uni.minerva.edu</p>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -26,6 +26,7 @@ RUN pip install --no-cache-dir -r mypy-requirements.txt
 COPY ai ai/
 COPY bot bot/
 COPY db db/
+COPY utils utils/
 
 # Copy the main application file
 COPY app.py .
