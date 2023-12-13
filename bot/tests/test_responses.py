@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import AsyncMock, MagicMock, patch
 from telegram import Update, Message, Chat, Document, File
+from db.tests.test_db_types import TestSerializedMessage
 from typing import Dict
 from datetime import datetime
 
@@ -95,7 +96,7 @@ class TestResponses(unittest.IsolatedAsyncioTestCase):
         context: AsyncMock = AsyncMock()
 
         # Call the handle_message function with the edited message
-        await handle_message(update, context)
+        await mock_handle_message(update, context)
 
         # Assert that the handle_message function was called with the edited message
         mock_handle_message.assert_awaited_once_with(update, context)
@@ -103,7 +104,7 @@ class TestResponses(unittest.IsolatedAsyncioTestCase):
         # Assert that the store_message_to_db function was called with the correct parameters
         mock_store_message_to_db.assert_awaited_once_with(
             chat_id=12345,
-            msg=SerializedMessage(edited_message),
+            msg=TestSerializedMessage(edited_message),
         )
 
 
