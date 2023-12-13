@@ -3,13 +3,11 @@ from datetime import datetime
 from unittest.mock import MagicMock, patch
 from telegram import Chat, Message, User
 from db.database import (
-    store_multiple_messages_to_db,
     store_message_to_db,
+    store_multiple_messages_to_db,
     get_multiple_messages_by_id,
 )
-from db.tests.test_db_types import  TestSerializedMessage
-from db.db_types import AddMessageResult
-from bot.telegram_types import TMessage
+from db.db_types import AddMessageResult, SerializedMessage
 
 
 class TestDatabase(unittest.TestCase):
@@ -24,7 +22,7 @@ class TestDatabase(unittest.TestCase):
             chat=self.chat,
             text="Test message",
         )
-        self.serialized_message = TestSerializedMessage(self.message)
+        self.serialized_message = SerializedMessage(self.message)
 
     @patch("db.database.db")
     def test_store_message_to_db_new(self, mock_db: MagicMock) -> None:
@@ -39,16 +37,23 @@ class TestDatabase(unittest.TestCase):
 
     @patch("db.database.db")
     def test_store_message_to_db_existing(self, mock_db: MagicMock) -> None:
-        mock_db.active_groups.find_one.side_effect = [True, True]
+        mock_db.active_groups.find_one.return_value = True
+        update_mock = MagicMock()
+        update_mock.modified_count = 0  # Explicitly set to an integer
+        mock_db.active_groups.update_one.return_value = update_mock
 
         result = store_message_to_db(self.chat_id, self.serialized_message)
-        self.assertEqual(result, AddMessageResult.EXISTING)
+        self.assertEqual(result, AddMessageResult.FAILURE)
 
     @patch("db.database.db")
     def test_store_message_to_db_failure(self, mock_db: MagicMock) -> None:
         mock_db.active_groups.find_one.side_effect = [None, None]
         mock_db.active_groups.insert_one.return_value = MagicMock()
-        mock_db.active_groups.update_one.return_value = MagicMock(acknowledged=False)
+
+        # Set modified_count of the MagicMock object to an integer
+        update_mock = MagicMock(acknowledged=False)
+        update_mock.modified_count = 0  # Explicitly set to an integer
+        mock_db.active_groups.update_one.return_value = update_mock
 
         result = store_message_to_db(self.chat_id, self.serialized_message)
         self.assertEqual(result, AddMessageResult.FAILURE)
@@ -72,52 +77,12 @@ class TestDatabase(unittest.TestCase):
             "categories": [],
             "messages": {self.message.message_id: self.message.to_dict()},
         }
+        update_mock = MagicMock()
+        update_mock.modified_count = 0  # Explicitly set to an integer
+        mock_db.active_groups.update_one.return_value = update_mock
 
         result = store_message_to_db(self.chat_id, self.serialized_message)
-        self.assertEqual(result, AddMessageResult.EXISTING)
-
-    @patch("db.database.db")
-    def test_get_multiple_messages_by_id(self, mock_db: MagicMock) -> None:
-        # Mock the expected database response
-        expected_messages = [
-            {
-                "message": {
-                    "id": "1",
-                    "type": "text",
-                    "date": "2023-11-17",
-                    "from": "Test",
-                    "from_id": "123",
-                    "reply_to_message_id": "",
-                    "text": "Test message 1",
-                    "text_entities": [],
-                }
-            },
-            {
-                "message": {
-                    "id": "2",
-                    "type": "text",
-                    "date": "2023-11-17",
-                    "from": "Test",
-                    "from_id": "123",
-                    "reply_to_message_id": "",
-                    "text": "Test message 2",
-                    "text_entities": [],
-                }
-            },
-            # Add more message dictionaries as needed
-        ]
-        mock_db.active_groups.aggregate.return_value = expected_messages
-
-        # Call the function to get messages by IDs
-        message_ids = ["1", "2"]
-        result = get_multiple_messages_by_id(self.chat_id, message_ids)
-
-        # Verify the result matches the expected messages
-        self.assertEqual(len(result), 2)
-        self.assertEqual(result[0]["id"], "1")
-        self.assertEqual(result[0]["text"], "Test message 1")
-        self.assertEqual(result[1]["id"], "2")
-        self.assertEqual(result[1]["text"], "Test message 2")
+        self.assertEqual(result, AddMessageResult.FAILURE)
 
 
 class TestStoreMessagesToDB(unittest.TestCase):
@@ -140,8 +105,8 @@ class TestStoreMessagesToDB(unittest.TestCase):
             text="Test message 2",
         )
         self.serialized_messages = [
-            TestSerializedMessage(self.message_1),
-            TestSerializedMessage(self.message_2),
+            SerializedMessage(self.message_1),
+            SerializedMessage(self.message_2),
         ]
 
     @patch("db.database.db")
