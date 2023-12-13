@@ -7,7 +7,8 @@ from db.database import (
     store_message_to_db,
     get_multiple_messages_by_id,
 )
-from db.db_types import AddMessageResult, SerializedMessage
+from db.tests.test_db_types import  TestSerializedMessage
+from db.db_types import AddMessageResult
 from bot.telegram_types import TMessage
 
 
@@ -23,7 +24,7 @@ class TestDatabase(unittest.TestCase):
             chat=self.chat,
             text="Test message",
         )
-        self.serialized_message = SerializedMessage(self.message)
+        self.serialized_message = TestSerializedMessage(self.message)
 
     @patch("db.database.db")
     def test_store_message_to_db_new(self, mock_db: MagicMock) -> None:
@@ -139,8 +140,8 @@ class TestStoreMessagesToDB(unittest.TestCase):
             text="Test message 2",
         )
         self.serialized_messages = [
-            SerializedMessage(self.message_1),
-            SerializedMessage(self.message_2),
+            TestSerializedMessage(self.message_1),
+            TestSerializedMessage(self.message_2),
         ]
 
     @patch("db.database.db")
