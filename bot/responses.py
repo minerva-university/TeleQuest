@@ -155,6 +155,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             ]
         )
 
+
 async def respond_to_question(
     question: str, chat_id: int, message_id: int, context: ContextTypes.DEFAULT_TYPE
 ) -> None:

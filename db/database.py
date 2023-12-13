@@ -54,7 +54,6 @@ def store_message_to_db(
             return AddMessageResult.FAILURE
 
 
-
 def store_multiple_messages_to_db(
     chat_id: int | None, messages: List[SerializedMessage]
 ) -> AddMessageResult:

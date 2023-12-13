@@ -32,7 +32,9 @@ def main(
     app.add_handler(MessageHandler(~filters.ChatType.GROUPS, history))
     # Message handler for new and edited messages in groups
     # Combines filters for messages and edited messages
-    combined_filter = filters.ChatType.GROUPS & (filters.UpdateType.MESSAGES | filters.UpdateType.EDITED_MESSAGE)
+    combined_filter = filters.ChatType.GROUPS & (
+        filters.UpdateType.MESSAGES | filters.UpdateType.EDITED_MESSAGE
+    )
     app.add_handler(MessageHandler(combined_filter, handle_message))
 
     if deploy:

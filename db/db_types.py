@@ -29,6 +29,7 @@ class AddMessageResult(Enum):
     SUCCESS = "Success"
     FAILURE = "Failure"
     EXISTING = "Existing"
+    UPDATED = "Updated"
 
 
 class SerializedMessage:

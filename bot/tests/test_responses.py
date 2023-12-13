@@ -69,6 +69,43 @@ class TestResponses(unittest.IsolatedAsyncioTestCase):
             parse_mode="markdown",
         )
 
+    @patch("bot.responses.store_message_to_db")
+    @patch("bot.responses.handle_message")
+    async def test_handle_edited_message(
+        self, mock_handle_message: AsyncMock, mock_store_message_to_db: AsyncMock
+    ) -> None:
+        # Create a Chat object
+        chat = Chat(id=12345, type="private", first_name="TestUser")
+
+        # Create an edited Message object
+        edited_message = Message(
+            message_id=1,
+            date=datetime.now(),
+            chat=chat,
+            text="Edited Test",
+        )
+
+        # Create an Update object with the edited message
+        update = Update(
+            update_id=1,
+            edited_message=edited_message,
+        )
+
+        # Set up the context mock
+        context: AsyncMock = AsyncMock()
+
+        # Call the handle_message function with the edited message
+        await handle_message(update, context)
+
+        # Assert that the handle_message function was called with the edited message
+        mock_handle_message.assert_awaited_once_with(update, context)
+
+        # Assert that the store_message_to_db function was called with the correct parameters
+        mock_store_message_to_db.assert_awaited_once_with(
+            chat_id=12345,
+            msg=SerializedMessage(edited_message),
+        )
+
 
 class TestHistory(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
