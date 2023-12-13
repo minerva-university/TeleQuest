@@ -18,6 +18,7 @@ WORKDIR /app
 # Copy the Python requirements and install them
 COPY mypy-requirements.txt .
 COPY .env .
+COPY utils utils/
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r mypy-requirements.txt
 

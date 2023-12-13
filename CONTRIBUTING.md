@@ -235,7 +235,7 @@ docker build --no-cache -t telequest:latest .
 docker-compose up -d 
 ```
 
-This should build and run the docker images for the bot and frontend. You can then access the frontend at `localhost:3000` and the bot cannot be accessed via a web browser, instead verify that it is running by testing on one of your telegram groups.
+This should build and run the docker images for the bot and frontend. You can then access the frontend at `localhost:3000` and the bot cannot be accessed via a web browser, instead verify that it is running by testing on one of your telegram groups. You can access the local TeleQuest here: https://t.me/localTelequest_bot
 
 ---
 

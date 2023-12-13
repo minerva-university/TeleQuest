@@ -1,6 +1,6 @@
 import os
 from bot.responses import start, help, handle_message, history
-from telegram.ext import ApplicationBuilder, Application
+from telegram.ext import ApplicationBuilder, Application, filters
 from telegram.ext import filters
 from telegram.ext import CommandHandler, MessageHandler, ContextTypes
 
@@ -30,7 +30,12 @@ def main(
     app.add_handler(CommandHandler("start", start, filters=~filters.ChatType.GROUPS))
     app.add_handler(CommandHandler("help", help, filters=~filters.ChatType.GROUPS))
     app.add_handler(MessageHandler(~filters.ChatType.GROUPS, history))
-    app.add_handler(msg_handler)  # add message handler
+    # Message handler for new and edited messages in groups
+    # Combines filters for messages and edited messages
+    combined_filter = filters.ChatType.GROUPS & (
+        filters.UpdateType.MESSAGES | filters.UpdateType.EDITED_MESSAGE
+    )
+    app.add_handler(MessageHandler(combined_filter, handle_message))
 
     if deploy:
         # listens for requests from any addresses

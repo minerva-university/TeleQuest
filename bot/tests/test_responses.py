@@ -1,12 +1,10 @@
+import json
 import unittest
 from unittest.mock import AsyncMock, MagicMock, patch
-from telegram import Update, Message, Chat, Document, File
-from typing import Dict
+from telegram import Update, Message, Chat, Document, User
 from datetime import datetime
-
-import json
-
-from bot.responses import start, help, history
+from bot.responses import start, help, history, handle_message
+from datetime import datetime
 
 
 class TestResponses(unittest.IsolatedAsyncioTestCase):
@@ -67,6 +65,81 @@ class TestResponses(unittest.IsolatedAsyncioTestCase):
             chat_id=12345,
             text="Help message for TestUser, ",
             parse_mode="markdown",
+        )
+
+    @patch("bot.responses.store_message_to_db")
+    async def test_handle_edited_message(
+        self, mock_store_message_to_db: AsyncMock
+    ) -> None:
+        # Create a Chat object
+        chat = Chat(id=12345, type="private", title="Test Chat")
+
+        # Create an edited Message object
+        edited_message = Message(
+            message_id=1,
+            date=datetime.now(),
+            chat=chat,
+            text="Edited Test",
+            from_user=User(id=123, first_name="TestUser", is_bot=False),
+        )
+
+        # Create an Update object with the edited message
+        update = Update(
+            update_id=1,
+            edited_message=edited_message,
+        )
+
+        # Call the handle_message function with the edited message
+        await handle_message(update, self.context)
+
+        # Check if store_message_to_db was called at least once
+        self.assertTrue(
+            mock_store_message_to_db.called, "store_message_to_db was not called"
+        )
+
+        # Extract the actual arguments used in the call to store_message_to_db
+        args, _ = mock_store_message_to_db.call_args
+
+        # Verify the chat_id argument
+        self.assertEqual(
+            args[0], 12345, "Incorrect chat_id passed to store_message_to_db"
+        )
+
+        # Verify attributes of the SerializedMessage object
+        actual_serialized_message = args[1]
+        self.assertEqual(
+            actual_serialized_message.id,
+            edited_message.message_id,
+            "Incorrect message ID",
+        )
+        self.assertEqual(
+            actual_serialized_message.text,
+            edited_message.text,
+            "Incorrect message text",
+        )
+        if edited_message.from_user is not None:
+            self.assertEqual(
+                actual_serialized_message.from_user["id"],
+                edited_message.from_user.id,
+                "Incorrect user ID",
+            )
+            self.assertEqual(
+                actual_serialized_message.from_user["first_name"],
+                edited_message.from_user.first_name,
+                "Incorrect user first name",
+            )
+        self.assertEqual(
+            actual_serialized_message.date,
+            edited_message.date,
+            "Incorrect message date",
+        )
+        self.assertIsNone(
+            actual_serialized_message.reply_to_message, "Incorrect reply_to_message"
+        )
+        self.assertEqual(
+            actual_serialized_message.chat_title,
+            edited_message.chat.title,
+            "Incorrect chat title",
         )
 
 

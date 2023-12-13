@@ -9,17 +9,16 @@ def store_message_to_db(
     chat_id: int | None, msg: SerializedMessage
 ) -> AddMessageResult:
     """
-    This function stores a given message to the database
+    This function stores or updates a given message in the database.
 
-    ----
     Parameters:
     chat_id: int | None
         The chat id of the group chat
-    msg: telegram.Message | None
-        The message object that is to be stored
+    msg: SerializedMessage
+        The message object that is to be stored or updated
     """
 
-    # check if the group chat exists, else create a collection for it.
+    # Check if the group chat exists, else create a collection for it.
     if not db.active_groups.find_one({"chat_id": chat_id}):
         db.active_groups.insert_one(
             {
@@ -29,27 +28,30 @@ def store_message_to_db(
             }
         )
 
+    # Check if the message already exists
     existing_message = db.active_groups.find_one(
         {"chat_id": chat_id, f"messages.{msg.get_id()}": {"$exists": True}}
     )
 
-    if not existing_message:
-        add_message_result = db.active_groups.update_one(
-            {"chat_id": chat_id},
-            {
-                "$set": {f"messages.{msg.get_id()}": msg.get_as_tmessage()},
-            },
+    # If the message exists, update it; otherwise, insert it as a new message
+    if existing_message:
+        update_result = db.active_groups.update_one(
+            {"chat_id": chat_id, f"messages.{msg.get_id()}": {"$exists": True}},
+            {"$set": {f"messages.{msg.get_id()}": msg.get_as_tmessage()}},
         )
-        if (
-            add_message_result.acknowledged
-            and add_message_result.matched_count > 0
-            and add_message_result.modified_count > 0
-        ):
-            return AddMessageResult.SUCCESS
+        if update_result.modified_count > 0:
+            return AddMessageResult.UPDATED
         else:
             return AddMessageResult.FAILURE
     else:
-        return AddMessageResult.EXISTING
+        add_message_result = db.active_groups.update_one(
+            {"chat_id": chat_id},
+            {"$set": {f"messages.{msg.get_id()}": msg.get_as_tmessage()}},
+        )
+        if add_message_result.modified_count > 0:
+            return AddMessageResult.SUCCESS
+        else:
+            return AddMessageResult.FAILURE
 
 
 def store_multiple_messages_to_db(

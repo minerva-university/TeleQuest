@@ -1,6 +1,5 @@
 import unittest
 import json
-from unittest.mock import MagicMock
 from bot.telegram_types import TMessage
 from db.db_types import (
     GroupChat,
@@ -12,7 +11,7 @@ from db.db_types import (
     SerializedMessage,
 )
 from datetime import datetime
-from telegram import Message, Chat, User, PhotoSize, Video, Voice
+from telegram import Message, Chat, User
 
 
 class TestDbTypes(unittest.TestCase):
@@ -60,15 +59,15 @@ class TestDbTypes(unittest.TestCase):
         self.assertIsInstance(pc_query_results, dict)
 
     def test_add_message_result_type(self) -> None:
-        # Check that all expected members are present in AddMessageResult
         self.assertTrue(AddMessageResult.SUCCESS in AddMessageResult)
         self.assertTrue(AddMessageResult.FAILURE in AddMessageResult)
         self.assertTrue(AddMessageResult.EXISTING in AddMessageResult)
+        self.assertTrue(AddMessageResult.UPDATED in AddMessageResult)
 
-        # Check that members are of the correct enum type
         self.assertIsInstance(AddMessageResult.SUCCESS, AddMessageResult)
         self.assertIsInstance(AddMessageResult.FAILURE, AddMessageResult)
         self.assertIsInstance(AddMessageResult.EXISTING, AddMessageResult)
+        self.assertIsInstance(AddMessageResult.UPDATED, AddMessageResult)
 
 
 class TestSerializedMessage(unittest.TestCase):
