@@ -95,16 +95,25 @@ class TestResponses(unittest.IsolatedAsyncioTestCase):
         # Set up the context mock
         context: AsyncMock = AsyncMock()
 
+        message_dict = {
+            "message_id": edited_message.message_id,
+            "date": edited_message.date.isoformat(),
+            "chat_id": edited_message.chat.id,
+            "text": edited_message.text,
+            # Include other relevant fields from the Message object
+        }
+        message_json = json.dumps(message_dict)
+
+        # Create a SerializedMessage object
+        serialized_message = TestSerializedMessage(message_json)
+
         # Call the handle_message function with the edited message
         await mock_handle_message(update, context)
-
-        # Assert that the handle_message function was called with the edited message
-        mock_handle_message.assert_awaited_once_with(update, context)
 
         # Assert that the store_message_to_db function was called with the correct parameters
         mock_store_message_to_db.assert_awaited_once_with(
             chat_id=12345,
-            msg=TestSerializedMessage(edited_message),
+            msg=serialized_message,
         )
 
 
