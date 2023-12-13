@@ -10,6 +10,7 @@
 .container {
   /* font-family: 'Arial', sans-serif; */
   font-family: 'Montserrat', sans-serif;
+  /* background-color: #ffffff; */
   background-image: linear-gradient(#cae9fd  , #fce2fc );
   padding: 20px;
   color: #0900af;
@@ -24,12 +25,23 @@ nav {
   margin-right: 3%;
 }
 
+p {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
 
 main{
   display: flex;
   justify-content: space-between;
   margin: 5%;
+  flex-wrap: wrap; /* Allow items to wrap */
+
+
 }
+
 
 #bottom-main{
   margin-top: 20%;
@@ -38,9 +50,12 @@ main{
 
 h2 {
   max-width: 100%;
+  font-size: 28px;
 }
 
-button {
+
+
+button, a {
   background-color: #5c7cfb00;
   border: 2.5px solid #0900af;
   border-radius: 20rem;
@@ -51,9 +66,11 @@ button {
   color: #f7f6ff;
   font-weight: 700;
   font-size: 15px;
+  text-decoration: none; /* Removes the underline from the link */
+
 }
 
-button:hover {
+button, a:hover {
   border-color: #00f; /* Change to desired hover color */
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Slight increase in shadow on hover */
 }
@@ -162,13 +179,46 @@ button:hover {
   align-items: center;
   justify-content: center;
 }
+/* Styles for responsiveness */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center-align the children */
+    margin: 3%; /* Reduce margin for smaller screens */
+  }
+
+  .main-content, .illustration {
+    width: 100%; /* Full width for smaller screens */
+    margin-bottom: 20px; /* Add some space between elements */
+  }
+
+  .title {
+    font-size: 5rem; /* Adjust title size for smaller screens */
+    text-align: center; /* Center the title */
+
+  }
+
+  .tagline h3 {
+    font-size: 24px; /* Adjust tagline font size */
+  }
+
+  .greatPitch, .exclusiveMessage {
+    font-size: 20px; /* Adjust font size for smaller screens */
+  }
+}
 
 .filled {
   background-color:#0900af;
 }
+.faq-section {
+  text-align: center;
+  margin-top: 100px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
 .faq-question {
   width: 500px;
-  font-size: 15px;
+  font-size: 20px;
   margin-bottom: 10px;
   background-color:#0900af;
 }
@@ -356,4 +406,48 @@ button:hover {
   max-width: 800px; /* Adjust this value based on your design needs */
   padding: 20px; /* Optional: Adds padding inside the container */
 }
+.profile-container {
+  text-align: center; /* Centers all child elements */
+}
 
+.circle-frame {
+  width: 150px; /* Adjust size as needed */
+  height: 150px; /* Adjust size as needed */
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto; /* Center the image container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-frame img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center; 
+}
+
+
+.name, .bio, .email {
+  margin: 0 0; /* Reduces the space between paragraphs */
+}
+
+.contact-section1, .contact-section2 {
+  display: flex;
+  justify-content: space-around; /* Adjust as needed */
+  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+}
+
+.profile-container {
+  flex-basis: 30%; /* Adjust based on the number of profiles per row */
+  text-align: center;
+  margin: 10px; /* Adds some space around each profile */
+}
+
+/* Add media query for smaller screens */
+@media (max-width: 768px) {
+  .profile-container {
+    flex-basis: 100%; /* Each profile takes full width on smaller screens */
+  }
+}

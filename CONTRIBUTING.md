@@ -221,18 +221,15 @@ to update our requirements.
 
 The `main` branch is automatically deployed to Heroku automatically when a new commit is pushed to it.
 
-You can run the app locally by running:
-```bash
-python3 app.py
-```
-to run the bot and then
-```bash
-cd web
-npm start
-```
-to run the frontend.
 
-Alternatively, you can run the bot and frontend in Docker containers by building the docker image and running it. You can do this by running:
+You can run the bot and frontend in Docker containers by building the docker image and running it. This depends on having specific environment variables defined in a `.env` file in the root directory. 
+
+**Before running this locally, you should have a `.env` file in the root directory with correct API keys. Use the `.env.example` to determine which variables are required for the bot to run properly. If you do not have this file, the docker file will not build so be sure to create a .env**
+
+For the purposes of testing, you can create the `.env` file with mock variables, this will allow the docker image to build, and also run the frontend and backend. However, the backend will not be able to connect to any of the external services like the Telegram API, MongoDB database, etc, because it requires the correct API keys. You will still be able to see the pretty frontend locally and watch a demo of how the bot works.
+
+After copying the `.env` to the project's root directory, you can build the docker image and run it.
+You can do this by running:
 ```bash
 docker build --no-cache -t telequest:latest .
 docker-compose up -d 
