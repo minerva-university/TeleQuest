@@ -8,12 +8,17 @@
 
 
 .container {
-  /* font-family: 'Arial', sans-serif; */
   font-family: 'Montserrat', sans-serif;
-  /* background-color: #ffffff; */
   background-image: linear-gradient(#cae9fd  , #fce2fc );
   padding: 20px;
   color: #0900af;
+}
+
+/* main landing page area */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* This centers the items vertically */
 }
 
 
@@ -38,8 +43,6 @@ main{
   justify-content: space-between;
   margin: 5%;
   flex-wrap: wrap; /* Allow items to wrap */
-
-
 }
 
 
@@ -181,16 +184,20 @@ button, a:hover {
 }
 /* Styles for responsiveness */
 @media (max-width: 768px) {
+
   main {
-    flex-direction: column; /* Stack children vertically */
+    display: flex;
+    flex-direction: column; /* Stack children vertically on smaller screens */
     align-items: center; /* Center-align the children */
-    margin: 3%; /* Reduce margin for smaller screens */
+    margin: 5%;
+    flex-wrap: wrap; /* Allow items to wrap */
   }
 
   .main-content, .illustration {
     width: 100%; /* Full width for smaller screens */
     margin-bottom: 20px; /* Add some space between elements */
   }
+  
 
   .title {
     font-size: 5rem; /* Adjust title size for smaller screens */
