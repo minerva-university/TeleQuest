@@ -238,7 +238,13 @@ class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
         self.context = MagicMock()
         self.context.bot.send_message = AsyncMock()
 
-    def create_message(self, text: Optional[str], user: Optional[User] = None, chat: Optional[Chat] = None, **kwargs: Any) -> Message:
+    def create_message(
+        self,
+        text: Optional[str],
+        user: Optional[User] = None,
+        chat: Optional[Chat] = None,
+        **kwargs: Any
+    ) -> Message:
         # Helper method to create a Message object for testing
         return Message(
             message_id=1,
@@ -249,23 +255,25 @@ class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
             **kwargs
         )
 
-    @patch('bot.responses.store_message_to_db', return_value=True)
-    @patch('bot.responses.upload_vectors')
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
     async def test_message_with_no_text(self, mock_store_message, mock_upload) -> None:
         update = Update(update_id=1, message=self.create_message(None, user=self.user))
         await handle_message(update, self.context)
         self.context.bot.send_message.assert_not_called()
 
-    @patch('bot.responses.store_message_to_db', return_value=True)
-    @patch('bot.responses.upload_vectors')
-    async def test_message_with_no_command_and_no_reply(self, mock_store_message, mock_upload) -> None:
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_message_with_no_command_and_no_reply(
+        self, mock_store_message, mock_upload
+    ) -> None:
         text = "Hello, how are you?"
         update = Update(update_id=1, message=self.create_message(text, user=self.user))
         await handle_message(update, self.context)
         self.context.bot.send_message.assert_not_called()
 
-    @patch('bot.responses.store_message_to_db', return_value=True)
-    @patch('bot.responses.upload_vectors')
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
     async def test_message_with_media(self, mock_store_message, mock_upload) -> None:
         update = Update(
             update_id=1,
@@ -274,8 +282,8 @@ class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
         await handle_message(update, self.context)
         self.context.bot.send_message.assert_not_called()
 
-    @patch('bot.responses.store_message_to_db', return_value=True)
-    @patch('bot.responses.upload_vectors')
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
     async def test_message_from_a_bot(self, mock_store_message, mock_upload) -> None:
         bot_user = User(id=124, first_name="BotUser", is_bot=True)
         update = Update(
@@ -284,8 +292,8 @@ class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
         await handle_message(update, self.context)
         self.context.bot.send_message.assert_not_called()
 
-    @patch('bot.responses.store_message_to_db', return_value=True)
-    @patch('bot.responses.upload_vectors')
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
     async def test_forwarded_message(self, mock_store_message, mock_upload) -> None:
         update = Update(
             update_id=1,
@@ -296,9 +304,11 @@ class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
         await handle_message(update, self.context)
         self.context.bot.send_message.assert_not_called()
 
-    @patch('bot.responses.store_message_to_db', return_value=True)
-    @patch('bot.responses.upload_vectors')
-    async def test_message_with_mention_or_hashtag(self, mock_store_message, mock_upload) -> None:
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_message_with_mention_or_hashtag(
+        self, mock_store_message, mock_upload
+    ) -> None:
         update = Update(
             update_id=1,
             message=self.create_message("Hello @user #test", user=self.user),
@@ -306,9 +316,11 @@ class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
         await handle_message(update, self.context)
         self.context.bot.send_message.assert_not_called()
 
-    @patch('bot.responses.store_message_to_db', return_value=True)
-    @patch('bot.responses.upload_vectors')
-    async def test_replying_to_previous_bot_message(self, mock_store_message, mock_upload) -> None:
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_replying_to_previous_bot_message(
+        self, mock_store_message, mock_upload
+    ) -> None:
         original_message = self.create_message("Original message", user=self.user)
         update = Update(
             update_id=1,
@@ -320,3 +332,4 @@ class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
         )
         await handle_message(update, self.context)
         self.context.bot.send_message.assert_not_called()
+
