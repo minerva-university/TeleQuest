@@ -229,7 +229,6 @@ class TestHistory(unittest.IsolatedAsyncioTestCase):
             text="History uploaded successfully.",
         )
 
-
 class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         # Sets up common objects for use in all test methods
