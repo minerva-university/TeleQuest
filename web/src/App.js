@@ -434,7 +434,7 @@ const App = () => {
               <b>Joshua Mark</b>
             </p>
             <p className="bio">Anime Enjoyer</p>
-            <p className="email">joshua.mark@uni.minerva.edu</p>
+            <a href="mailto:joshua.mark@uni.minerva.edu" className="email"><strong>joshua.mark@uni.minerva.edu</strong></a>
           </div>
           <div className="profile-container">
             <div className="circle-frame">
@@ -444,7 +444,7 @@ const App = () => {
               <b>Ifeoluwakolopin Are</b>
             </p>
             <p className="bio">john grisham & vibes</p>
-            <p className="email">ife@uni.minerva.edu</p>
+            <a href="mailto:ife@uni.minerva.edu" className="email"><strong>ife@uni.minerva.edu</strong></a>
           </div>
           <div className="profile-container">
             <div className="circle-frame">
@@ -454,7 +454,7 @@ const App = () => {
               <b>Mako Ohara</b>
             </p>
             <p className="bio">vibing with the team 😄</p>
-            <p className="email">mako_ohara@uni.minerva.edu</p>
+            <a href="mailto:mako_ohara@uni.minerva.edu" className="email"><strong>mako_ohara@uni.minerva.edu</strong></a>
           </div>
         </div>
         <div className="contact-section2">
@@ -469,7 +469,7 @@ const App = () => {
               I got you covered with a Spotify playlist for every possible
               occasion.
             </p>
-            <p className="email">majaostrowska@uni.minerva.edu</p>
+            <a href="mailto:majaostrowska@uni.minerva.edu" className="email"><strong>majaostrowska@uni.minerva.edu</strong></a>
           </div>
           <div className="profile-container">
             <div className="circle-frame">
@@ -479,7 +479,7 @@ const App = () => {
               <b>Andrii Korotun</b>
             </p>
             <p className="bio">Origami master</p>
-            <p className="email"> andrii@uni.minerva.edu</p>
+            <a href="mailto:andrii@uni.minerva.edu" className="email"><strong>andrii@uni.minerva.edu</strong></a>
           </div>
           <div className="profile-container">
             <div className="circle-frame">
@@ -489,7 +489,7 @@ const App = () => {
               <b>Cassandra Marguerit Cruz</b>
             </p>
             <p className="bio">Hardcore Taylor Swift stan</p>
-            <p className="email"> casscruz@uni.minerva.edu</p>
+            <a href="mailto:casscruz@uni.minerva.edu" className="email"><strong>casscruz@uni.minerva.edu</strong></a>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ TeleQuest aims to provide an intuitive and user-friendly Telegram bot to meet yo
 - [TeleQuest](#telequest)
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
+  - [Watch the Demo here.](#watch-the-demo-here)
   - [Technical Design Document](#technical-design-document)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -18,7 +19,13 @@ TeleQuest consists of two main parts:
 
 1. **Telegram Bot**: An interactive bot built using Python that offers various functionalities. You can directly start a conversation with our bot on Telegram by [clicking here](t.me/minerva_tele_quest_bot).
 
-2. **Website**: A comprehensive website built with React. The website provides in-depth details about the Telegram bot and serves as an introductory platform for new users. Visit our website [here](#link-to-the-website).
+2. **Website**: A comprehensive website built with React. The website provides in-depth details about the Telegram bot and serves as an introductory platform for new users. Visit our website [here](https://tele-quest-frontend-361e59465eec.herokuapp.com/).
+
+## Watch the Demo here.
+https://github.com/minerva-university/TeleQuest/assets/60819380/5df9c255-804c-4bb4-891e-fa7b0c26d724
+
+## Team Demo
+Here is an extended demo of the application by the TeleQuest [team](https://drive.google.com/file/d/1t-FyhYqsiMIQ2gTCnfbBYBlu5xUUOSNU/view?usp=sharing)
 
 ## Technical Design Document
 The technical design document can be found [here](https://docs.google.com/document/d/1c7tumNsGgMlP1C7nDkOWpKqCtP4PA8J50vj7RY-cPXo/edit?usp=sharing)
