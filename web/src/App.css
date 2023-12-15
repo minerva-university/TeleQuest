@@ -452,9 +452,26 @@ button, a:hover {
   margin: 10px; /* Adds some space around each profile */
 }
 
+a.email {
+  background-color: transparent; /* Removes any background */
+  color: #0900af; /* Or any color you want for the link */
+  border: none; /* Removes border if it's styled as a button */
+  padding: 0; /* Resets padding */
+  font-size: inherit; /* Keeps font size consistent with surrounding text */
+  box-shadow: none; /* Removes box-shadow if any */
+  /* Any other properties to undo button styling */
+}
+
+a.email:hover {
+  color: #060078; /* Change color on hover for visual feedback */
+  background-color: transparent; /* Ensures no background change on hover */
+  /* Any other hover effects you want */
+}
 /* Add media query for smaller screens */
 @media (max-width: 768px) {
   .profile-container {
     flex-basis: 100%; /* Each profile takes full width on smaller screens */
   }
 }
+
+
