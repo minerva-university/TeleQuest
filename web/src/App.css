@@ -465,7 +465,7 @@ a.email {
 a.email:hover {
   color: #060078; /* Change color on hover for visual feedback */
   background-color: transparent; /* Ensures no background change on hover */
-  /* Any other hover effects you want */
+  text-decoration: underline; /* Adds underline on hover */
 }
 /* Add media query for smaller screens */
 @media (max-width: 768px) {
