@@ -18,6 +18,7 @@ Thank you for your interest in contributing to TeleQuest. This document will gui
   - [Approving a Pull Request](#approving-a-pull-request)
   - [Merging a Pull Request](#merging-a-pull-request)
   - [Deployment](#deployment)
+    - [Local deployment](#local-deployment)
 
 ## Setting Up Your Development Environment
 
@@ -219,10 +220,11 @@ to update our requirements.
 
 ## Deployment
 
-The `main` branch is automatically deployed to Heroku automatically when a new commit is pushed to it.
+Both frontend and backend of the project are deployed on Heroku. The `main` branch is automatically deployed to Heroku automatically when a new commit is pushed to it.
 
+### Local deployment
 
-You can run the bot and frontend in Docker containers by building the docker image and running it. This depends on having specific environment variables defined in a `.env` file in the root directory. 
+You can run the bot and frontend locally in Docker containers by building the docker image and running it. This depends on having specific environment variables defined in a `.env` file in the root directory. 
 
 **Before running this locally, you should have a `.env` file in the root directory with correct API keys. Use the `.env.example` to determine which variables are required for the bot to run properly. If you do not have this file, the docker file will not build so be sure to create a .env**
 
