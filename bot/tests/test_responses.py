@@ -332,5 +332,3 @@ class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
         )
         await handle_message(update, self.context)
         self.context.bot.send_message.assert_not_called()
-
-
