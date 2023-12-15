@@ -22,6 +22,8 @@ TeleQuest consists of two main parts:
 2. **Website**: A comprehensive website built with React. The website provides in-depth details about the Telegram bot and serves as an introductory platform for new users. Visit our website [here](https://tele-quest-frontend-361e59465eec.herokuapp.com/).
 
 ## Watch the Demo here.
+https://github.com/minerva-university/TeleQuest/assets/60819380/5df9c255-804c-4bb4-891e-fa7b0c26d724
+
 
 
 ## Technical Design Document
