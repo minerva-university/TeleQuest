@@ -24,7 +24,8 @@ TeleQuest consists of two main parts:
 ## Watch the Demo here.
 https://github.com/minerva-university/TeleQuest/assets/60819380/5df9c255-804c-4bb4-891e-fa7b0c26d724
 
-
+## Team Demo
+Here is an extended demo of the application by the TeleQuest [team](https://drive.google.com/file/d/1t-FyhYqsiMIQ2gTCnfbBYBlu5xUUOSNU/view?usp=sharing)
 
 ## Technical Design Document
 The technical design document can be found [here](https://docs.google.com/document/d/1c7tumNsGgMlP1C7nDkOWpKqCtP4PA8J50vj7RY-cPXo/edit?usp=sharing)
