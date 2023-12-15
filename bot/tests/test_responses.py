@@ -227,3 +227,82 @@ class TestHistory(unittest.IsolatedAsyncioTestCase):
             chat_id=12345,
             text="History uploaded successfully.",
         )
+
+
+class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        # Sets up common objects for use in all test methods.
+        # This includes a mock user, a mock chat, and a mock context.
+        # The context's bot.send_message is set to an AsyncMock to simulate asynchronous behavior.
+        self.user = User(id=123, first_name="TestUser", is_bot=False)
+        self.chat = Chat(id=12345, type="private", first_name="TestUser")
+        self.context = MagicMock()
+        self.context.bot.send_message = AsyncMock()
+
+    def create_message(self, text, user=None, chat=None, **kwargs):
+        # A helper method for creating a mock Message object.
+        # It allows customization of the message text, user, chat, and other properties.
+        return Message(
+            message_id=1,
+            date=datetime.now(),
+            chat=chat or self.chat,
+            text=text,
+            from_user=user or self.user,
+            **kwargs
+        )
+
+    async def test_message_with_text_no_command(self):
+        # Tests the bot's response to a message that doesn't contain a command.
+        # It checks that the bot does not send a message back.
+        update = Update(update_id=1, message=self.create_message("Hello, how are you?"))
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    async def test_message_with_media(self):
+        # Tests the bot's response to a message containing media (e.g., a photo).
+        # It verifies that the bot does not attempt to send a message in response.
+        update = Update(
+            update_id=1, message=self.create_message(None, photo=[MagicMock()])
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    async def test_message_from_a_bot(self):
+        # Tests how the bot reacts to a message sent from another bot.
+        # The bot should not respond to messages from other bots.
+        bot_user = User(id=124, first_name="BotUser", is_bot=True)
+        update = Update(
+            update_id=1, message=self.create_message("Message from bot", user=bot_user)
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    async def test_forwarded_message(self):
+        # Tests the bot's behavior when it receives a forwarded message.
+        # The bot is expected not to respond to forwarded messages.
+        update = Update(
+            update_id=1,
+            message=self.create_message("Forwarded message", forward_from=self.user),
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    async def test_message_with_mention_or_hashtag(self):
+        # Tests the bot's behavior when it receives a message with a mention or hashtag.
+        # The bot is expected not to send a response to such messages.
+        update = Update(update_id=1, message=self.create_message("Hello @user #test"))
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    async def test_replying_to_previous_bot_message(self):
+        # Tests the bot's behavior when it receives a message that is a reply to one of its own messages.
+        # The bot is expected not to respond to such reply messages.
+        original_message = self.create_message("Original message")
+        update = Update(
+            update_id=1,
+            message=self.create_message(
+                "Replying to bot message", reply_to_message=original_message
+            ),
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
