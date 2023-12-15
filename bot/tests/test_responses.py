@@ -5,6 +5,7 @@ from telegram import Update, Message, Chat, Document, User
 from datetime import datetime
 from bot.responses import start, help, history, handle_message
 from datetime import datetime
+from typing import Optional, Any
 
 
 class TestResponses(unittest.IsolatedAsyncioTestCase):
@@ -227,3 +228,113 @@ class TestHistory(unittest.IsolatedAsyncioTestCase):
             chat_id=12345,
             text="History uploaded successfully.",
         )
+
+
+class TestHandleMessage(unittest.IsolatedAsyncioTestCase):
+    def setUp(self) -> None:
+        self.user = User(id=123, first_name="TestUser", is_bot=False)
+        self.chat = Chat(id=12345, type="private", first_name="TestUser")
+        self.context = MagicMock()
+        self.context.bot.send_message = AsyncMock()
+
+    def create_message(
+        self,
+        text: Optional[str],
+        user: Optional[User] = None,
+        chat: Optional[Chat] = None,
+        **kwargs: Any
+    ) -> Message:
+        return Message(
+            message_id=1,
+            date=datetime.now(),
+            chat=chat or self.chat,
+            text=text,
+            from_user=user or self.user,
+            **kwargs
+        )
+
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_message_with_no_text(
+        self, mock_store_message: MagicMock, mock_upload: MagicMock
+    ) -> None:
+        update = Update(update_id=1, message=self.create_message(None, user=self.user))
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_message_with_no_command_and_no_reply(
+        self, mock_store_message: MagicMock, mock_upload: MagicMock
+    ) -> None:
+        text = "Hello, how are you?"
+        update = Update(update_id=1, message=self.create_message(text, user=self.user))
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_message_with_media(
+        self, mock_store_message: MagicMock, mock_upload: MagicMock
+    ) -> None:
+        update = Update(
+            update_id=1,
+            message=self.create_message(None, photo=[MagicMock()], user=self.user),
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_message_from_a_bot(
+        self, mock_store_message: MagicMock, mock_upload: MagicMock
+    ) -> None:
+        bot_user = User(id=124, first_name="BotUser", is_bot=True)
+        update = Update(
+            update_id=1, message=self.create_message("Message from bot", user=bot_user)
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_forwarded_message(
+        self, mock_store_message: MagicMock, mock_upload: MagicMock
+    ) -> None:
+        update = Update(
+            update_id=1,
+            message=self.create_message(
+                "Forwarded message", forward_from=self.user, user=self.user
+            ),
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_message_with_mention_or_hashtag(
+        self, mock_store_message: MagicMock, mock_upload: MagicMock
+    ) -> None:
+        update = Update(
+            update_id=1,
+            message=self.create_message("Hello @user #test", user=self.user),
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
+
+    @patch("bot.responses.store_message_to_db", return_value=True)
+    @patch("bot.responses.upload_vectors")
+    async def test_replying_to_previous_bot_message(
+        self, mock_store_message: MagicMock, mock_upload: MagicMock
+    ) -> None:
+        original_message = self.create_message("Original message", user=self.user)
+        update = Update(
+            update_id=1,
+            message=self.create_message(
+                "Replying to bot message",
+                reply_to_message=original_message,
+                user=self.user,
+            ),
+        )
+        await handle_message(update, self.context)
+        self.context.bot.send_message.assert_not_called()
